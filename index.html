@@ -6,13 +6,7 @@
   <title>Simulador Salário Líquido CAIXA - Proposta 16/09/2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen pb-12">
 
@@ -27,14 +21,19 @@
     </div>
   </header>
 
-  <!-- Nota de Esclarecimento -->
+  <!-- Nota de Esclarecimento e Fontes -->
   <div class="max-w-6xl mx-auto px-4 mt-5">
-    <div class="bg-amber-50 border-l-4 border-amber-500 p-3.5 rounded-r-xl shadow-sm text-xs text-amber-900 flex items-start gap-2.5">
-      <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-base flex-shrink-0"></i>
-      <div class="leading-relaxed">
-        <span class="font-bold uppercase tracking-wide text-amber-950">Nota de Esclarecimento:</span>
-        Esta ferramenta é uma <strong>simulação independente de caráter estritamente elucidativo</strong> desenvolvida para demonstrar os impactos financeiros da <strong>proposta apresentada pela CAIXA na mesa de negociação em 16/09/2026</strong>. Valores exatos podem variar conforme a composição de rubricas individuais, funções comissionadas, histórico e planos de previdência.
+    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm text-xs text-amber-950 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <div class="flex items-start gap-2.5">
+        <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-base flex-shrink-0"></i>
+        <div class="leading-relaxed">
+          <span class="font-bold uppercase tracking-wide text-amber-950">Nota de Esclarecimento & Fontes:</span>
+          Esta ferramenta é uma <strong>simulação independente de caráter estritamente elucidativo</strong> fundamentada nas informações e números divulgados pelos canais oficiais das entidades representativas (<strong>CONTRAF-CUT, FENAE, SPBancários</strong> e federações sindicais). Valores exatos individuais podem variar conforme a composição de rubricas particulares e plano previdenciário.
+        </div>
       </div>
+      <a href="#fontes" class="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 font-bold bg-white/90 hover:bg-white px-3 py-1.5 rounded-lg border border-amber-200 transition flex-shrink-0 shadow-xs">
+        <i class="fa-solid fa-newspaper text-blue-600"></i> Ver Fontes & Bases
+      </a>
     </div>
   </div>
 
@@ -132,7 +131,7 @@
           <!-- Diretos -->
           <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100 flex justify-between items-center">
             <div>
-              <span class="text-xs font-bold text-slate-700">Dep. Diretos (Cônjuge / Filhos &lt; 24)</span>
+              <span class="text-xs font-bold text-slate-700">Dep. Diretos (Cônjuge / Filhos &lt; 21 anos)</span>
               <p class="text-[10px] text-blue-700 font-medium">Hoje: R$ 480 | Proposta: R$ 560 (Teto 9% + R$ 50 excedentes)</p>
               <p class="text-[10px] text-emerald-700 font-semibold mt-0.5"><i class="fa-solid fa-check mr-1"></i>Deduz R$ 189,59 na base do IRRF</p>
             </div>
@@ -144,8 +143,12 @@
           <!-- Indiretos -->
           <div class="bg-amber-50/40 p-3 rounded-xl border border-amber-100 flex justify-between items-center">
             <div>
-              <span class="text-xs font-bold text-slate-700">Dep. Indiretos</span>
+              <span class="text-xs font-bold text-slate-700">Dep. Indiretos (Filhos 21 a 24 anos)</span>
               <p class="text-[10px] text-amber-800 font-medium">Hoje: R$ 480 | Proposta: R$ 660 (Fora do teto)</p>
+              <label class="flex items-center gap-1 text-[10px] text-slate-600 mt-1 cursor-pointer">
+                <input type="checkbox" id="depIndiretosUniv" checked onchange="recalcular()" class="rounded text-blue-600 focus:ring-0">
+                <span>Estudantes universitários (deduzem IRRF)</span>
+              </label>
             </div>
             <input type="number" id="depIndiretos" value="0" min="0" max="10"
               class="w-14 bg-white border border-slate-300 text-center font-bold text-slate-800 rounded py-1"
@@ -198,7 +201,7 @@
           <span id="cardDescontosNovoPct" class="text-xs text-slate-500">0% descontado</span>
         </div>
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-[11px] font-bold text-slate-400 uppercase">Ganho Real Efetivo</span>
+          <span class="text-[11px] font-bold text-slate-400 uppercase">Variação Líquida Mensal</span>
           <p id="cardDiferencaLiq" class="text-lg font-extrabold mt-1">R$ 0,00</p>
           <span id="cardDiferencaPct" class="text-xs font-bold text-slate-500">0,00%</span>
         </div>
@@ -256,7 +259,7 @@
               <tr class="bg-blue-50/20">
                 <td class="p-3 text-slate-800">
                   Saúde CAIXA: Titular
-                  <span class="block text-[10px] text-slate-400">Hoje 3,5% | Proposta 3,7%</span>
+                  <span class="block text-[10px] text-slate-400">Hoje 3,5% | Proposta 3,7% da remuneração</span>
                 </td>
                 <td id="tbSaudeTitHoje" class="p-3 text-right">R$ 0,00</td>
                 <td id="tbSaudeTitNovo" class="p-3 text-right">R$ 0,00</td>
@@ -265,20 +268,20 @@
               <tr class="bg-blue-50/20">
                 <td class="p-3 text-slate-800">
                   Saúde CAIXA: Dependentes Diretos
-                  <span class="block text-[10px] text-slate-400">Hoje R$ 480 | Proposta R$ 560</span>
+                  <span class="block text-[10px] text-slate-400">Hoje R$ 480 | Proposta R$ 560 por dependente</span>
                 </td>
                 <td id="tbSaudeDepDirHoje" class="p-3 text-right">R$ 0,00</td>
                 <td id="tbSaudeDepDirNovo" class="p-3 text-right">R$ 0,00</td>
                 <td id="tbSaudeDepDirDif" class="p-3 text-right text-rose-500">+R$ 0,00</td>
               </tr>
-              <tr class="bg-blue-50/40">
-                <td class="p-3 font-semibold text-slate-800">
-                  Subtotal Saúde Direto no Teto
-                  <span id="tbTravaTetoMsg" class="block text-[10px] font-bold text-amber-700"></span>
+              <tr class="bg-emerald-50/40">
+                <td class="p-3 font-semibold text-emerald-900">
+                  <i class="fa-solid fa-shield-heart text-emerald-600 mr-1"></i> Alívio da Trava de Teto (Economia)
+                  <span id="tbTravaTetoMsg" class="block text-[10px] font-bold text-emerald-700"></span>
                 </td>
-                <td id="tbSaudeSubtHoje" class="p-3 text-right font-semibold">R$ 0,00</td>
-                <td id="tbSaudeSubtNovo" class="p-3 text-right font-semibold">R$ 0,00</td>
-                <td id="tbSaudeSubtDif" class="p-3 text-right font-bold text-rose-600">+R$ 0,00</td>
+                <td id="tbSaudeSubtHoje" class="p-3 text-right font-bold text-emerald-700">R$ 0,00</td>
+                <td id="tbSaudeSubtNovo" class="p-3 text-right font-bold text-emerald-700">R$ 0,00</td>
+                <td id="tbSaudeSubtDif" class="p-3 text-right font-bold text-emerald-700">R$ 0,00</td>
               </tr>
               <tr class="bg-blue-50/20">
                 <td class="p-3 text-slate-800">
@@ -335,291 +338,98 @@
     </div>
   </main>
 
-  <script>
-    // INSS Progressivo Oficial
-    function calcularInss(salario) {
-      let imposto = 0;
-      const f1 = 1412.00;
-      const f2 = 2666.68;
-      const f3 = 4000.03;
-      const tetoRgps = 7786.02;
+  <!-- Seção Fontes Consultadas & Bases Sindicais -->
+  <section id="fontes" class="max-w-6xl mx-auto px-4 mt-8">
+    <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-scale-balanced"></i> Coerência & Transparência
+          </div>
+          <h3 class="text-lg md:text-xl font-extrabold text-slate-900">Fontes Consultadas & Bases Informativas</h3>
+          <p class="text-slate-500 text-xs mt-1">Os coeficientes e regras deste simulador foram consolidados e cruzados a partir de canais oficiais das entidades sindicais e tabelas federais:</p>
+        </div>
+        <span class="text-[11px] bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-lg self-start md:self-auto">
+          Mesa de Negociação CAIXA • Setembro/2026
+        </span>
+      </div>
 
-      if (salario <= f1) {
-        imposto = salario * 0.075;
-      } else if (salario <= f2) {
-        imposto = (f1 * 0.075) + ((salario - f1) * 0.09);
-      } else if (salario <= f3) {
-        imposto = (f1 * 0.075) + ((f2 - f1) * 0.09) + ((salario - f2) * 0.12);
-      } else if (salario <= tetoRgps) {
-        imposto = (f1 * 0.075) + ((f2 - f1) * 0.09) + ((f3 - f2) * 0.12) + ((salario - f3) * 0.14);
-      } else {
-        imposto = (f1 * 0.075) + ((f2 - f1) * 0.09) + ((f3 - f2) * 0.12) + ((tetoRgps - f3) * 0.14);
-      }
-      return Math.round(imposto * 100) / 100;
-    }
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        <!-- CONTRAF-CUT -->
+        <div class="bg-slate-50/70 hover:bg-blue-50/40 p-4 rounded-xl border border-slate-200 hover:border-blue-200 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-blue-900 font-bold text-sm">
+              <i class="fa-solid fa-landmark text-blue-600"></i> CONTRAF-CUT
+            </div>
+            <p class="text-[11px] text-slate-600 mt-2 leading-relaxed">
+              Comissão Executiva dos Empregados da CAIXA (CEE/Caixa). Relatórios das mesas de negociação, índices econômicos (INPC + 0,60%) e cláusulas do ACT.
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
+            <span class="font-semibold text-slate-500">Comando Nacional</span>
+            <a href="https://contrafcut.com.br" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-600 hover:underline">contrafcut.com.br <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+          </div>
+        </div>
 
-    // IRRF Progressivo Oficial
-    function calcularIrrf(baseCalculo) {
-      if (baseCalculo <= 2259.20) return 0;
-      if (baseCalculo <= 2826.65) return (baseCalculo * 0.075) - 169.44;
-      if (baseCalculo <= 3751.05) return (baseCalculo * 0.15) - 381.44;
-      if (baseCalculo <= 4664.68) return (baseCalculo * 0.225) - 662.77;
-      return (baseCalculo * 0.275) - 896.00;
-    }
+        <!-- FENAE / APCEFs -->
+        <div class="bg-slate-50/70 hover:bg-blue-50/40 p-4 rounded-xl border border-slate-200 hover:border-blue-200 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-blue-900 font-bold text-sm">
+              <i class="fa-solid fa-users-rectangle text-blue-600"></i> FENAE & APCEFs
+            </div>
+            <p class="text-[11px] text-slate-600 mt-2 leading-relaxed">
+              Federação Nacional das Associações do Pessoal da CAIXA. Parâmetros de sustentabilidade do Saúde CAIXA, teto do banco em 9% e cobertura do déficit de 2026.
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
+            <span class="font-semibold text-slate-500">Associações CAIXA</span>
+            <a href="https://fenae.org.br" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-600 hover:underline">fenae.org.br <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+          </div>
+        </div>
 
-    function setSalario(val) {
-      document.getElementById('salarioBase').value = val;
-      recalcular();
-    }
+        <!-- SPBancários -->
+        <div class="bg-slate-50/70 hover:bg-blue-50/40 p-4 rounded-xl border border-slate-200 hover:border-blue-200 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-blue-900 font-bold text-sm">
+              <i class="fa-solid fa-building-columns text-blue-600"></i> SPBancários
+            </div>
+            <p class="text-[11px] text-slate-600 mt-2 leading-relaxed">
+              Sindicato dos Bancários de SP, Osasco e Região. Detalhamento dos valores: Titular 3,7%, Diretos R$ 560, Indiretos R$ 660, teto 9% e regra do piso de R$ 50 por vida.
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
+            <span class="font-semibold text-slate-500">Base Sindical SP</span>
+            <a href="https://spbancarios.com.br" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-600 hover:underline">spbancarios.com.br <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+          </div>
+        </div>
 
-    function fmtMoeda(val) {
-      return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
+        <!-- Legislação & Tabelas Federais -->
+        <div class="bg-slate-50/70 hover:bg-blue-50/40 p-4 rounded-xl border border-slate-200 hover:border-blue-200 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-blue-900 font-bold text-sm">
+              <i class="fa-solid fa-scale-unbalanced-flip text-blue-600"></i> Receita Federal & MPS
+            </div>
+            <p class="text-[11px] text-slate-600 mt-2 leading-relaxed">
+              Tabela progressiva oficial do INSS (Portaria MPS/MF nº 2/2024), Lei 14.848/2024 (IRRF com Desconto Simplificado de R$ 564,80) e Lei 9.532/97 (Teto 12% FUNCEF).
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
+            <span class="font-semibold text-slate-500">Normas Oficiais</span>
+            <span class="font-bold text-emerald-700 bg-emerald-100/70 px-1.5 py-0.5 rounded">Tabelas Vigentes</span>
+          </div>
+        </div>
+      </div>
 
-    function recalcular() {
-      const salarioBase = parseFloat(document.getElementById('salarioBase').value) || 0;
-      const inpc = (parseFloat(document.getElementById('taxaInpc').value) || 0) / 100;
-      const taxaReal = (parseFloat(document.getElementById('taxaReal').value) || 0) / 100;
-      const reajusteTotal = inpc + taxaReal;
-      const salarioNovo = salarioBase * (1 + reajusteTotal);
+      <!-- Nota de Coerência entre as Fontes -->
+      <div class="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-start gap-3">
+        <i class="fa-solid fa-check-double text-emerald-600 text-base mt-0.5 flex-shrink-0"></i>
+        <div class="leading-relaxed">
+          <strong class="text-slate-800">Convergência e Coerência dos Dados:</strong> Os valores foram auditados e cruzados entre os relatórios da CONTRAF-CUT, FENAE, SPBancários, SINTRAFPCR e federações regionais (Bahia/Feira, Paraná, Rio de Janeiro). Todas as fontes sindicais convergem nos mesmos parâmetros para a proposta da CAIXA: titular em 3,7%, dependentes diretos a R$ 560, teto do grupo familiar em 9% (com taxa mínima de R$ 50 para dependentes excedentes), dependentes indiretos fora do teto a R$ 660 e especiais a R$ 900.
+        </div>
+      </div>
+    </div>
+  </section>
 
-      const aliquotaFuncef = (parseFloat(document.getElementById('aliquotaFuncef').value) || 0) / 100;
-      document.getElementById('tbFuncefPctInfo').innerText = `${(aliquotaFuncef * 100).toFixed(1)}% sobre remuneração`;
-      const outrosDesc = parseFloat(document.getElementById('outrosDescontos').value) || 0;
-
-      const depDiretos = parseInt(document.getElementById('depDiretos').value) || 0;
-      const depIndiretos = parseInt(document.getElementById('depIndiretos').value) || 0;
-      const depEspeciais = parseInt(document.getElementById('depEspeciais').value) || 0;
-      const totalDeps = depDiretos + depIndiretos + depEspeciais;
-
-      // Dedução legal por dependente no IRRF (R$ 189,59/mês por dependente direto)
-      const deducaoDepIrrf = depDiretos * 189.59;
-      if (depDiretos > 0) {
-        document.getElementById('tbIrrfDeducaoMsg').innerText = `Deduzido INSS, FUNCEF e ${fmtMoeda(deducaoDepIrrf)} (${depDiretos} dep. direto(s))`;
-      } else {
-        document.getElementById('tbIrrfDeducaoMsg').innerText = 'Base deduzida de INSS e FUNCEF';
-      }
-
-      // ============================================
-      // 1. CÁLCULO CENÁRIO HOJE
-      // ============================================
-      const inssHoje = calcularInss(salarioBase);
-      const funcefHoje = salarioBase * aliquotaFuncef;
-
-      const titularHoje = salarioBase * 0.035;
-      const depDiretoHoje = depDiretos * 480;
-      const depForaHoje = (depIndiretos + depEspeciais) * 480;
-      const custoTotalSemTetoHoje = titularHoje + (totalDeps * 480);
-      const tetoHoje = salarioBase * 0.07;
-      const totalSaudeHoje = Math.min(tetoHoje, custoTotalSemTetoHoje);
-      const subtotalDiretosHoje = Math.min(tetoHoje, titularHoje + depDiretoHoje);
-
-      // Base de IRRF Hoje deduzindo INSS, FUNCEF e os dependentes diretos
-      const baseIrrfHoje = Math.max(0, salarioBase - inssHoje - funcefHoje - deducaoDepIrrf);
-      const irrfHoje = calcularIrrf(baseIrrfHoje);
-
-      const totalDescontosHoje = inssHoje + funcefHoje + totalSaudeHoje + irrfHoje + outrosDesc;
-      const liquidoHoje = salarioBase - totalDescontosHoje;
-
-      // ============================================
-      // 2. CÁLCULO CENÁRIO PROPOSTA NOVA COM REGRA DOS R$ 50 EXCEDENTES
-      // ============================================
-      const inssNovo = calcularInss(salarioNovo);
-      const funcefNovo = salarioNovo * aliquotaFuncef;
-
-      const titularNovo = salarioNovo * 0.037;
-      const tetoNovo = salarioNovo * 0.09;
-      const custoBaseDiretos = titularNovo + (depDiretos * 560);
-      
-      let subtotalDiretosNovo;
-      let bateuTetoNovo = false;
-      let depsExcedentes = 0;
-
-      if (depDiretos === 0) {
-        subtotalDiretosNovo = titularNovo;
-      } else if (custoBaseDiretos <= tetoNovo) {
-        subtotalDiretosNovo = custoBaseDiretos;
-      } else {
-        bateuTetoNovo = true;
-        const margemDep = Math.max(0, tetoNovo - titularNovo);
-        const depsAteTeto = Math.max(1, Math.ceil(margemDep / 560));
-        depsExcedentes = Math.max(0, depDiretos - depsAteTeto);
-        subtotalDiretosNovo = tetoNovo + (depsExcedentes * 50);
-      }
-
-      const depForaNovo = (depIndiretos * 660) + (depEspeciais * 900);
-      const totalSaudeNovo = subtotalDiretosNovo + depForaNovo;
-
-      // Base de IRRF Novo deduzindo INSS, FUNCEF e os dependentes diretos
-      const baseIrrfNovo = Math.max(0, salarioNovo - inssNovo - funcefNovo - deducaoDepIrrf);
-      const irrfNovo = calcularIrrf(baseIrrfNovo);
-
-      const totalDescontosNovo = inssNovo + funcefNovo + totalSaudeNovo + irrfNovo + outrosDesc;
-      const liquidoNovo = salarioNovo - totalDescontosNovo;
-
-      // ============================================
-      // 3. DIFERENÇAS E VARIAÇÕES
-      // ============================================
-      const difBruto = salarioNovo - salarioBase;
-      const difLiquido = liquidoNovo - liquidoHoje;
-      const difPlano = totalSaudeNovo - totalSaudeHoje;
-
-      // Atualização dos Cards
-      document.getElementById('cardLiqHoje').innerText = fmtMoeda(liquidoHoje);
-      document.getElementById('cardDescontosHojePct').innerText = `${((totalDescontosHoje / salarioBase) * 100).toFixed(1)}% descontado em folha`;
-
-      document.getElementById('cardLiqNovo').innerText = fmtMoeda(liquidoNovo);
-      document.getElementById('cardDescontosNovoPct').innerText = `${((totalDescontosNovo / salarioNovo) * 100).toFixed(1)}% descontado em folha`;
-
-      // Atualização da Tabela
-      document.getElementById('tbSalHoje').innerText = fmtMoeda(salarioBase);
-      document.getElementById('tbSalNovo').innerText = fmtMoeda(salarioNovo);
-      document.getElementById('tbSalDif').innerText = `+${fmtMoeda(difBruto)}`;
-
-      document.getElementById('tbInssHoje').innerText = fmtMoeda(inssHoje);
-      document.getElementById('tbInssNovo').innerText = fmtMoeda(inssNovo);
-      document.getElementById('tbInssDif').innerText = (inssNovo - inssHoje >= 0 ? '+' : '') + fmtMoeda(inssNovo - inssHoje);
-
-      document.getElementById('tbFuncefHoje').innerText = fmtMoeda(funcefHoje);
-      document.getElementById('tbFuncefNovo').innerText = fmtMoeda(funcefNovo);
-      document.getElementById('tbFuncefDif').innerText = `+${fmtMoeda(funcefNovo - funcefHoje)}`;
-
-      document.getElementById('tbSaudeTitHoje').innerText = fmtMoeda(titularHoje);
-      document.getElementById('tbSaudeTitNovo').innerText = fmtMoeda(titularNovo);
-      document.getElementById('tbSaudeTitDif').innerText = `+${fmtMoeda(titularNovo - titularHoje)}`;
-
-      document.getElementById('tbSaudeDepDirHoje').innerText = fmtMoeda(depDiretoHoje);
-      document.getElementById('tbSaudeDepDirNovo').innerText = fmtMoeda(depDiretos * 560);
-      document.getElementById('tbSaudeDepDirDif').innerText = `+${fmtMoeda((depDiretos * 560) - depDiretoHoje)}`;
-
-      document.getElementById('tbSaudeSubtHoje').innerText = `${fmtMoeda(subtotalDiretosHoje)} (${((subtotalDiretosHoje / salarioBase) * 100).toFixed(1)}%)`;
-      document.getElementById('tbSaudeSubtNovo').innerText = `${fmtMoeda(subtotalDiretosNovo)} (${((subtotalDiretosNovo / salarioNovo) * 100).toFixed(1)}%)`;
-      document.getElementById('tbSaudeSubtDif').innerText = `+${fmtMoeda(subtotalDiretosNovo - subtotalDiretosHoje)}`;
-
-      if (bateuTetoNovo) {
-        document.getElementById('tbTravaTetoMsg').innerText = depsExcedentes > 0 
-          ? `Teto de 9,0% atingido + ${depsExcedentes} dep. excedente(s) a R$ 50 cada`
-          : 'Limitado à trava do teto de 9,0%';
-      } else {
-        document.getElementById('tbTravaTetoMsg').innerText = 'Abaixo do limite de 9,0%';
-      }
-
-      document.getElementById('tbSaudeForaHoje').innerText = fmtMoeda(depForaHoje);
-      document.getElementById('tbSaudeForaNovo').innerText = fmtMoeda(depForaNovo);
-      document.getElementById('tbSaudeForaDif').innerText = `+${fmtMoeda(depForaNovo - depForaHoje)}`;
-
-      document.getElementById('tbIrrfHoje').innerText = fmtMoeda(irrfHoje);
-      document.getElementById('tbIrrfNovo').innerText = fmtMoeda(irrfNovo);
-      document.getElementById('tbIrrfDif').innerText = `+${fmtMoeda(irrfNovo - irrfHoje)}`;
-
-      document.getElementById('tbOutrosHoje').innerText = fmtMoeda(outrosDesc);
-      document.getElementById('tbOutrosNovo').innerText = fmtMoeda(outrosDesc);
-
-      const elLiqDif = document.getElementById('tbTotalLiqDif');
-      document.getElementById('tbTotalLiqHoje').innerText = fmtMoeda(liquidoHoje);
-      document.getElementById('tbTotalLiqNovo').innerText = fmtMoeda(liquidoNovo);
-      elLiqDif.innerText = (difLiquido >= 0 ? '+' : '') + fmtMoeda(difLiquido);
-      elLiqDif.className = `p-3 text-right font-extrabold ${difLiquido >= 0 ? 'text-emerald-700' : 'text-rose-700'}`;
-
-      // Diagnóstico com Regra Estrita de Ganho Real
-      aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxaReal);
-    }
-
-    function aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxaReal) {
-      const card = document.getElementById('verdictCard');
-      const badge = document.getElementById('verdictBadge');
-      const title = document.getElementById('verdictTitle');
-      const desc = document.getElementById('verdictDesc');
-      const icon = document.getElementById('verdictIcon');
-      const cardDif = document.getElementById('cardDiferencaLiq');
-      const cardDifPct = document.getElementById('cardDiferencaPct');
-
-      const impactoPlanoPp = (difPlano / salarioBase) * 100;
-      const taxaRealPp = taxaReal * 100;
-      const inpcPp = inpc * 100;
-
-      if (impactoPlanoPp < taxaRealPp) {
-        const ganhoRealRemanescentePp = taxaRealPp - impactoPlanoPp;
-        const valorGanhoReal = salarioBase * (ganhoRealRemanescentePp / 100);
-
-        card.className = "rounded-2xl p-6 border shadow-sm bg-emerald-50/70 border-emerald-300";
-        badge.className = "text-xs font-extrabold uppercase px-2.5 py-1 rounded-md bg-emerald-200 text-emerald-900";
-        badge.innerText = "Ganho Real Preservado";
-        title.className = "text-2xl font-black mt-2 text-emerald-950";
-        title.innerText = `Ganho Real Efetivo: +${ganhoRealRemanescentePp.toFixed(2)} p.p.`;
-        icon.className = "text-3xl text-emerald-600";
-        icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-        desc.innerText = `O reajuste cobriu o aumento do plano (+${impactoPlanoPp.toFixed(2)} p.p.). A reposição inflacionária (INPC) foi 100% mantida e ainda sobra um aumento real positivo de ${fmtMoeda(valorGanhoReal)} mensais no seu poder de compra.`;
-
-        cardDif.innerText = `+${fmtMoeda(difLiquido)}`;
-        cardDif.className = "text-lg font-extrabold mt-1 text-emerald-700";
-        cardDifPct.innerText = `+${ganhoRealRemanescentePp.toFixed(2)}% real além da inflação`;
-        cardDifPct.className = "text-xs font-bold text-emerald-700";
-
-      } else if (impactoPlanoPp <= (taxaRealPp + inpcPp)) {
-        const corrosaoInpcPp = impactoPlanoPp - taxaRealPp;
-        const perdaInflacionariaMensal = salarioBase * (corrosaoInpcPp / 100);
-
-        card.className = "rounded-2xl p-6 border shadow-sm bg-amber-50/80 border-amber-300";
-        badge.className = "text-xs font-extrabold uppercase px-2.5 py-1 rounded-md bg-amber-200 text-amber-900";
-        badge.innerText = "Ganho Real: 0,00% (Anulado)";
-        title.className = "text-2xl font-black mt-2 text-amber-950";
-        title.innerText = "Sem Ganho Real • Corrosão do INPC";
-        icon.className = "text-3xl text-amber-600";
-        icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-        desc.innerText = `O aumento do Saúde CAIXA (+${impactoPlanoPp.toFixed(2)} p.p.) superou os ${taxaRealPp.toFixed(2)}% de aumento real, zerando-o completamente. Não há ganho real e o benefício confiscou ${corrosaoInpcPp.toFixed(2)} p.p. da reposição da inflação (${fmtMoeda(perdaInflacionariaMensal)}/mês a menos de recomposição inflacionária).`;
-
-        cardDif.innerText = (difLiquido >= 0 ? '+' : '') + fmtMoeda(difLiquido);
-        cardDif.className = "text-lg font-extrabold mt-1 text-amber-700";
-        cardDifPct.innerText = "Ganho real: 0,00% (anulado)";
-        cardDifPct.className = "text-xs font-bold text-amber-700";
-
-      } else {
-        const perdaLiquida = Math.abs(difLiquido);
-
-        card.className = "rounded-2xl p-6 border shadow-sm bg-rose-50/80 border-rose-300";
-        badge.className = "text-xs font-extrabold uppercase px-2.5 py-1 rounded-md bg-rose-200 text-rose-900";
-        badge.innerText = "Prejuízo Líquido";
-        title.className = "text-2xl font-black mt-2 text-rose-950";
-        title.innerText = "Perda Nominal no Bolso";
-        icon.className = "text-3xl text-rose-600";
-        icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
-        desc.innerText = `Todo o reajuste salarial concedido (INPC + 0,60%) foi insuficiente para pagar a nova tabela do plano de saúde. O seu salário líquido encolhe ${fmtMoeda(perdaLiquida)} por mês a partir de 2027.`;
-
-        cardDif.innerText = `-${fmtMoeda(perdaLiquida)}`;
-        cardDif.className = "text-lg font-extrabold mt-1 text-rose-700";
-        cardDifPct.innerText = "Ganho real: NEGATIVO";
-        cardDifPct.className = "text-xs font-bold text-rose-700";
-      }
-    }
-
-    function copiarResumo() {
-      const sal = document.getElementById('salarioBase').value;
-      const liqH = document.getElementById('cardLiqHoje').innerText;
-      const liqN = document.getElementById('cardLiqNovo').innerText;
-      const dif = document.getElementById('cardDiferencaLiq').innerText;
-      const statusReal = document.getElementById('cardDiferencaPct').innerText;
-      const verdict = document.getElementById('verdictTitle').innerText;
-      const funcef = document.getElementById('funcefLabel').innerText;
-
-      const msg = `*Simulação de Contracheque CAIXA (Líquido)*\n` +
-                  `• Salário Base: R$ ${sal}\n` +
-                  `• Contribuição FUNCEF: ${funcef}\n` +
-                  `• Líquido Atual: ${liqH}\n` +
-                  `• Líquido com Novo Custeio: ${liqN}\n` +
-                  `• Variação Nominal: ${dif}/mês\n` +
-                  `• Status Real: ${statusReal}\n` +
-                  `• Parecer: ${verdict}\n\n` +
-                  `ℹ️ _Simulação independente para fins exclusivamente elucidativos baseada na proposta CAIXA de 16/09/2026._`;
-
-      navigator.clipboard.writeText(msg).then(() => {
-        alert('Resumo copiado com sucesso com a nota elucidativa de 16/09/2026 inclusa!');
-      });
-    }
-
-    window.onload = function() {
-      recalcular();
-    };
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

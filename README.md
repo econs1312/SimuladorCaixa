@@ -32,12 +32,15 @@ Este projeto está hospedado e integrado à **[Vercel](https://vercel.com)**:
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
-
-- **HTML5 & Vanilla JavaScript:** Lógica de cálculo reativa sem necessidade de build complexo.
-- **Tailwind CSS (CDN):** Estilização moderna e layout responsivo.
-- **Font Awesome:** Ícones visuais para melhor usabilidade.
-- **Vercel:** Hospedagem e automação de deploy contínuo.
+## 🛠️ Tecnologias & Estrutura
+ 
+- **Estrutura Modular e Limpa:**
+  - `index.html`: Marcação semântica e interface responsiva.
+  - `style.css`: Estilização e regras de input personalizadas.
+  - `app.js`: Engine reativa de cálculos e simulações financeiras.
+- **Tailwind CSS (CDN):** Estilização utilitária de alta performance.
+- **Font Awesome:** Iconografia profissional.
+- **Vercel:** Hospedagem na borda (Edge Network) e CI/CD contínuo a cada commit na branch `main`.
 
 ---
 
@@ -56,6 +59,34 @@ cd SimuladorCaixa
 # No Windows (PowerShell):
 Start-Process index.html
 ```
+
+---
+
+## 📚 Fontes e Bases Sindicais Consultadas
+
+Os dados e coeficientes aplicados nesta ferramenta foram consolidados a partir de publicações oficiais, boletins das mesas de negociação e tabelas públicas federais, garantindo total coerência entre as fontes:
+
+1. **[CONTRAF-CUT](https://contrafcut.com.br)** (Confederação Nacional dos Trabalhadores do Ramo Financeiro):
+   - Relatórios da CEE/Caixa (Comissão Executiva dos Empregados da CAIXA).
+   - Cláusulas econômicas do ACT (reajuste salarial com reposição de 100% do INPC + 0,60% de aumento real).
+2. **[FENAE](https://fenae.org.br)** (Federação Nacional das Associações do Pessoal da CAIXA) & **APCEFs**:
+   - Parâmetros do Saúde CAIXA e modelo de sustentabilidade solidária sem discriminação por idade.
+   - Elevação do teto de custeio patronal da CAIXA de 6,5% para 9% da folha a partir de 2027.
+   - Assunção integral do déficit financeiro de 2026 pela CAIXA.
+3. **[SPBancários](https://spbancarios.com.br)** (Sindicato dos Bancários de São Paulo, Osasco e Região):
+   - Detalhamento de valores da proposta de 17/09/2026:
+     - Titular: **3,7%** da remuneração base.
+     - Dependentes diretos (cônjuge e filhos < 21 anos): **R$ 560,00** (sujeitos ao teto familiar de 9%).
+     - Dependentes indiretos (filhos 21 a 24 anos): **R$ 660,00** (fora do teto familiar).
+     - Filhos de 24 a 27 anos, pais e dependentes judiciais: **R$ 900,00** (fora do teto).
+     - Regra da trava de **9% da remuneração base** para o grupo familiar com taxa mínima de **R$ 50,00 por dependente excedente**.
+     - Redução do pronto atendimento de R$ 150 para R$ 120.
+4. **Federações e Sindicatos Regionais** (SintrafPCR, Bahia/Feira, Paraná, Rio de Janeiro):
+   - Boletins deliberativos de assembleias e análises atuariais convergentes.
+5. **Legislação Tributária e Previdenciária Oficial:**
+   - **INSS:** Tabela progressiva do RGPS (Portaria Interministerial MPS/MF nº 2/2024, teto de R$ 7.786,02).
+   - **IRRF:** Tabela progressiva com Desconto Simplificado Mensal (R$ 564,80) vs. Deduções Legais (R$ 189,59/dependente) conforme Lei nº 14.848/2024 e Lei nº 9.250/1995.
+   - **Previdência Complementar (FUNCEF):** Limite legal de dedutibilidade de 12% da remuneração bruta na fonte (Lei nº 9.532/1997, art. 11).
 
 ---
 
