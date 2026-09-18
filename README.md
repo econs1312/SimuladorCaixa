@@ -62,14 +62,29 @@ Start-Process index.html
 
 ---
 
-## 📚 Fontes e Bases Sindicais Consultadas
+## 📚 Fontes Oficiais e Bases Informativas Consultadas
 
-Os dados e coeficientes aplicados nesta ferramenta foram consolidados a partir de publicações oficiais, boletins das mesas de negociação e tabelas públicas federais, garantindo total coerência entre as fontes:
+Os dados e coeficientes aplicados nesta ferramenta foram auditados e cruzados entre os canais oficiais da CAIXA, das entidades sindicais e das tabelas públicas federais, garantindo total convergência:
 
-1. **[CONTRAF-CUT](https://contrafcut.com.br)** (Confederação Nacional dos Trabalhadores do Ramo Financeiro):
+1. **[CAIXA Notícias](https://caixanoticias.caixa.gov.br/Paginas/Not%C3%ADcias/2026/09-SETEMBRO/Saude-CAIXA-confira-os-avancos-da-nova-proposta.aspx)** (Portal Oficial de Comunicação da CAIXA):
+   - Comunicado oficial *"Saúde CAIXA: confira os avanços da nova proposta"* e portal da [Negociação Coletiva 2026](https://caixanoticias.caixa.gov.br/negociacaocoletiva).
+   - Confirmação dos parâmetros institucionais:
+     - **Mensalidade única do Titular:** 3,7% da remuneração base tanto para empregados da ativa quanto para aposentados (pacto intergeracional).
+     - **Dependentes diretos:** R$ 560,00 fixo por dependente (independente da idade).
+     - **Teto do grupo familiar:** 9% da remuneração base.
+     - **Dependentes indiretos e especiais fora do teto:** Filhos de 21 a 24 anos (R$ 660,00) e pais/judiciais/24-27 anos (R$ 900,00).
+     - **13 Mensalidades ao ano:** Cobrança mantida de 13 mensalidades anuais (12 regulares + 13º salário).
+     - **Coparticipação anual:** Teto máximo reduzido de R$ 4.800 para R$ 4.700/ano.
+     - **Pronto-socorro:** Redução da coparticipação em atendimentos de emergência de R$ 150 para R$ 120.
+     - **Telemedicina:** 100% isenta de coparticipação.
+     - **Custeio CAIXA:** Limite de participação do banco elevado para até 9% da folha de pagamento.
+     - **Investimento em prevenção:** R$ 236 milhões em 2027.
+     - **Adesão e permanência:** Regra mantida com vedação de reingresso ao plano após cancelamento.
+
+2. **[CONTRAF-CUT](https://contrafcut.com.br)** (Confederação Nacional dos Trabalhadores do Ramo Financeiro):
    - Relatórios da CEE/Caixa (Comissão Executiva dos Empregados da CAIXA).
    - Cláusulas econômicas do ACT (reajuste salarial com reposição de 100% do INPC + 0,60% de aumento real).
-2. **[FENAE](https://fenae.org.br)** (Federação Nacional das Associações do Pessoal da CAIXA) & **APCEFs**:
+3. **[FENAE](https://fenae.org.br)** (Federação Nacional das Associações do Pessoal da CAIXA) & **APCEFs**:
    - Parâmetros do Saúde CAIXA e modelo de sustentabilidade solidária sem discriminação por idade.
    - Elevação do teto de custeio patronal da CAIXA de 6,5% para 9% da folha a partir de 2027.
    - Assunção integral do déficit financeiro de 2026 pela CAIXA.

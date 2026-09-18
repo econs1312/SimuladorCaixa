@@ -38,7 +38,7 @@
         <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-base flex-shrink-0"></i>
         <div class="leading-relaxed">
           <span class="font-bold uppercase tracking-wide text-amber-950">Nota de Esclarecimento & Fontes:</span>
-          Esta ferramenta é uma <strong>simulação independente de caráter estritamente elucidativo</strong> fundamentada nas informações e números divulgados pelos canais oficiais das entidades representativas (<strong>CONTRAF-CUT, FENAE, SPBancários</strong> e federações sindicais). Valores exatos individuais podem variar conforme a composição de rubricas particulares e plano previdenciário.
+          Esta ferramenta é uma <strong>simulação independente de caráter estritamente elucidativo</strong> fundamentada nas informações e números divulgados pelos canais oficiais da própria <strong>CAIXA Econômica Federal (CAIXA Notícias)</strong> e das entidades representativas dos empregados (<strong>CONTRAF-CUT, FENAE, SPBancários</strong> e federações sindicais). Valores exatos individuais podem variar conforme a composição de rubricas particulares e plano previdenciário.
         </div>
       </div>
       <a href="#fontes" class="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 font-bold bg-white/90 hover:bg-white px-3 py-1.5 rounded-lg border border-amber-200 transition flex-shrink-0 shadow-xs">
@@ -330,10 +330,141 @@
         </button>
       </div>
 
+      <!-- Card Impacto Anual do Saúde CAIXA (13 Mensalidades) -->
+      <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-5 shadow-sm border border-blue-900/50">
+        <div class="flex items-center justify-between pb-3 border-b border-blue-800/60">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-amber-400 text-lg"></i>
+            <div>
+              <h4 class="font-bold text-sm text-white">Impacto Anual do Saúde CAIXA (13 Mensalidades)</h4>
+              <p class="text-[11px] text-blue-200">A CAIXA cobra 13 mensalidades ao ano (12 meses regulares + 13º salário)</p>
+            </div>
+          </div>
+          <span class="text-[10px] bg-blue-800/80 text-amber-300 font-bold px-2 py-0.5 rounded uppercase tracking-wider">Regra Oficial</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 text-center">
+          <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+            <span class="text-[10px] uppercase font-bold text-slate-300 block">Custo Anual Atual</span>
+            <p id="cardSaudeAnualHoje" class="text-base font-extrabold text-white mt-1">R$ 0,00</p>
+            <span class="text-[10px] text-slate-400">13x mensalidade atual</span>
+          </div>
+          <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+            <span class="text-[10px] uppercase font-bold text-slate-300 block">Custo Anual Proposta</span>
+            <p id="cardSaudeAnualNovo" class="text-base font-extrabold text-amber-300 mt-1">R$ 0,00</p>
+            <span class="text-[10px] text-slate-400">13x nova mensalidade</span>
+          </div>
+          <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+            <span class="text-[10px] uppercase font-bold text-slate-300 block">Variação Anual Real</span>
+            <p id="cardSaudeAnualDif" class="text-base font-extrabold text-rose-400 mt-1">+R$ 0,00</p>
+            <span class="text-[10px] text-slate-400">no orçamento familiar</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 
-  <!-- Seção Fontes Consultadas & Bases Sindicais -->
+  <!-- Seção Comparativo Oficial CAIXA: Avanços & Regras Complementares -->
+  <section class="max-w-6xl mx-auto px-4 mt-8">
+    <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-hospital-user"></i> Informativo Oficial CAIXA Notícias
+          </div>
+          <h3 class="text-lg md:text-xl font-extrabold text-slate-900">Comparativo de Propostas & Regras Complementares</h3>
+          <p class="text-slate-500 text-xs mt-1">Quadro institucional divulgado pela CAIXA com os principais avanços frente à proposta anterior:</p>
+        </div>
+        <a href="https://caixanoticias.caixa.gov.br/Paginas/Not%C3%ADcias/2026/09-SETEMBRO/Saude-CAIXA-confira-os-avancos-da-nova-proposta.aspx" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 transition self-start md:self-auto flex items-center gap-1.5">
+          <i class="fa-solid fa-file-invoice"></i> Ver Publicação Oficial CAIXA <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-6">
+        <!-- Coparticipação -->
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center">
+          <div class="w-8 h-8 mx-auto bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm mb-2">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Coparticipação Anual</span>
+          <p class="text-sm font-black text-slate-800 mt-0.5">R$ 4.700</p>
+          <span class="inline-block text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded mt-1">
+            <i class="fa-solid fa-arrow-down text-[8px]"></i> Redução R$ 100
+          </span>
+        </div>
+
+        <!-- Pronto-Socorro -->
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center">
+          <div class="w-8 h-8 mx-auto bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm mb-2">
+            <i class="fa-solid fa-truck-medical"></i>
+          </div>
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Pronto-Socorro</span>
+          <p class="text-sm font-black text-slate-800 mt-0.5">R$ 120</p>
+          <span class="inline-block text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded mt-1">
+            <i class="fa-solid fa-arrow-down text-[8px]"></i> Redução R$ 30
+          </span>
+        </div>
+
+        <!-- Telemedicina -->
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center">
+          <div class="w-8 h-8 mx-auto bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm mb-2">
+            <i class="fa-solid fa-stethoscope"></i>
+          </div>
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Telemedicina</span>
+          <p class="text-sm font-black text-emerald-700 mt-0.5">100% Isenta</p>
+          <span class="inline-block text-[10px] font-semibold text-slate-500 bg-slate-200 px-1.5 py-0.2 rounded mt-1">
+            Sem coparticipação
+          </span>
+        </div>
+
+        <!-- 13 Mensalidades -->
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center">
+          <div class="w-8 h-8 mx-auto bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm mb-2">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">13 Mensalidades</span>
+          <p class="text-sm font-black text-slate-800 mt-0.5">13 ao ano</p>
+          <span class="inline-block text-[10px] font-semibold text-slate-500 bg-slate-200 px-1.5 py-0.2 rounded mt-1">
+            Incide no 13º salário
+          </span>
+        </div>
+
+        <!-- Custeio Banco -->
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center">
+          <div class="w-8 h-8 mx-auto bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm mb-2">
+            <i class="fa-solid fa-building-columns"></i>
+          </div>
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Custeio CAIXA</span>
+          <p class="text-sm font-black text-slate-800 mt-0.5">Até 9% da folha</p>
+          <span class="inline-block text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded mt-1">
+            <i class="fa-solid fa-arrow-up text-[8px]"></i> Antes era 8%
+          </span>
+        </div>
+
+        <!-- Prevenção à Saúde -->
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center">
+          <div class="w-8 h-8 mx-auto bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm mb-2">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Ações Prevenção</span>
+          <p class="text-sm font-black text-slate-800 mt-0.5">R$ 236 mi</p>
+          <span class="inline-block text-[10px] font-semibold text-slate-500 bg-slate-200 px-1.5 py-0.2 rounded mt-1">
+            A partir de 2027
+          </span>
+        </div>
+      </div>
+
+      <!-- Alerta sobre Cancelamento e Reingresso -->
+      <div class="mt-4 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
+        <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 text-base flex-shrink-0"></i>
+        <div>
+          <strong>Atenção sobre Adesão e Cancelamento (Regra CAIXA Mantida):</strong> A CAIXA confirmou no comunicado oficial que <em>permanece vedado o reingresso</em> ao Saúde CAIXA após eventual cancelamento. Qualquer decisão deve considerar que o desligamento do plano é definitivo.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Fontes Consultadas & Bases Informativas -->
   <section id="fontes" class="max-w-6xl mx-auto px-4 mt-8">
     <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -342,14 +473,35 @@
             <i class="fa-solid fa-scale-balanced"></i> Coerência & Transparência
           </div>
           <h3 class="text-lg md:text-xl font-extrabold text-slate-900">Fontes Consultadas & Bases Informativas</h3>
-          <p class="text-slate-500 text-xs mt-1">Os coeficientes e regras deste simulador foram consolidados e cruzados a partir de canais oficiais das entidades sindicais e tabelas federais:</p>
+          <p class="text-slate-500 text-xs mt-1">Os coeficientes e regras deste simulador foram auditados e cruzados entre os canais oficiais da CAIXA, das entidades sindicais e da legislação federal:</p>
         </div>
         <span class="text-[11px] bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-lg self-start md:self-auto">
           Mesa de Negociação CAIXA • Setembro/2026
         </span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        <!-- CAIXA Notícias (Patronal Oficial) -->
+        <div class="bg-blue-50/70 hover:bg-blue-100/50 p-4 rounded-xl border-2 border-blue-200 hover:border-blue-400 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-blue-950 font-black text-sm">
+                <i class="fa-solid fa-building-flag text-blue-700"></i> CAIXA Notícias
+              </div>
+              <span class="text-[9px] font-black uppercase tracking-wider bg-blue-600 text-white px-2 py-0.5 rounded">Patronal Oficial</span>
+            </div>
+            <p class="text-[11px] text-slate-700 mt-2 leading-relaxed">
+              Comunicação oficial da Caixa Econômica Federal. Confirma alíquota única de 3,7% (ativos e aposentados), R$ 560 por dep. direto, teto familiar de 9%, 13 mensalidades, coparticipação máxima de R$ 4.700 e pronto-socorro a R$ 120.
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-blue-200 flex items-center justify-between text-[10px]">
+            <span class="font-semibold text-slate-600">Portal Oficial</span>
+            <a href="https://caixanoticias.caixa.gov.br/Paginas/Not%C3%ADcias/2026/09-SETEMBRO/Saude-CAIXA-confira-os-avancos-da-nova-proposta.aspx" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-700 hover:underline inline-flex items-center gap-1">
+              Ver Matéria <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+            </a>
+          </div>
+        </div>
+
         <!-- CONTRAF-CUT -->
         <div class="bg-slate-50/70 hover:bg-blue-50/40 p-4 rounded-xl border border-slate-200 hover:border-blue-200 transition flex flex-col justify-between">
           <div>
@@ -419,7 +571,7 @@
       <div class="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-start gap-3">
         <i class="fa-solid fa-check-double text-emerald-600 text-base mt-0.5 flex-shrink-0"></i>
         <div class="leading-relaxed">
-          <strong class="text-slate-800">Convergência e Coerência dos Dados:</strong> Os valores foram auditados e cruzados entre os relatórios da CONTRAF-CUT, FENAE, SPBancários, SINTRAFPCR e federações regionais (Bahia/Feira, Paraná, Rio de Janeiro). Todas as fontes sindicais convergem nos mesmos parâmetros para a proposta da CAIXA: titular em 3,7%, dependentes diretos a R$ 560, teto do grupo familiar em 9% (com taxa mínima de R$ 50 para dependentes excedentes), dependentes indiretos fora do teto a R$ 660 e especiais a R$ 900.
+          <strong class="text-slate-800">Convergência e Coerência dos Dados:</strong> Os valores foram integralmente confirmados pelo comunicado oficial da <strong>CAIXA Econômica Federal (CAIXA Notícias)</strong> e pelos relatórios das entidades sindicais (<strong>CONTRAF-CUT, FENAE, SPBancários</strong> e federações regionais). Ambas as fontes convergem exatamente nos mesmos parâmetros: titular em 3,7%, dependentes diretos a R$ 560, teto familiar em 9% (com taxa mínima de R$ 50 para dependentes excedentes), dependentes indiretos fora do teto a R$ 660, 13 mensalidades anuais e coparticipação máxima de R$ 4.700.
         </div>
       </div>
     </div>

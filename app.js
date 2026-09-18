@@ -190,6 +190,21 @@ function recalcular() {
   document.getElementById('cardLiqNovo').innerText = fmtMoeda(liquidoNovo);
   document.getElementById('cardDescontosNovoPct').innerText = `${((totalDescontosNovo / salarioNovo) * 100).toFixed(1)}% descontado em folha`;
 
+  // Impacto Anual do Saúde CAIXA (13 Mensalidades ao ano conforme regra oficial CAIXA)
+  const saudeAnualHoje = totalSaudeHoje * 13;
+  const saudeAnualNovo = totalSaudeNovo * 13;
+  const difSaudeAnual = saudeAnualNovo - saudeAnualHoje;
+
+  const elSaudeAnualHoje = document.getElementById('cardSaudeAnualHoje');
+  const elSaudeAnualNovo = document.getElementById('cardSaudeAnualNovo');
+  const elSaudeAnualDif = document.getElementById('cardSaudeAnualDif');
+  if (elSaudeAnualHoje && elSaudeAnualNovo && elSaudeAnualDif) {
+    elSaudeAnualHoje.innerText = fmtMoeda(saudeAnualHoje);
+    elSaudeAnualNovo.innerText = fmtMoeda(saudeAnualNovo);
+    elSaudeAnualDif.innerText = (difSaudeAnual >= 0 ? '+' : '') + fmtMoeda(difSaudeAnual);
+    elSaudeAnualDif.className = `text-base font-extrabold mt-1 ${difSaudeAnual > 0 ? 'text-rose-400' : (difSaudeAnual < 0 ? 'text-emerald-400' : 'text-slate-300')}`;
+  }
+
   // Atualização da Tabela de Folha
   document.getElementById('tbSalHoje').innerText = fmtMoeda(salarioBase);
   document.getElementById('tbSalNovo').innerText = fmtMoeda(salarioNovo);
@@ -334,18 +349,24 @@ function copiarResumo() {
   const difPct = document.getElementById('cardDiferencaPct').innerText;
   const verdict = document.getElementById('verdictTitle').innerText;
   const funcef = document.getElementById('funcefLabel').innerText;
+  const anualDif = document.getElementById('cardSaudeAnualDif') ? document.getElementById('cardSaudeAnualDif').innerText : '';
 
-  const msg = `*Simulação de Contracheque CAIXA (Líquido)*\n` +
-              `• Salário Base: R$ ${sal}\n` +
-              `• Contribuição FUNCEF: ${funcef}\n` +
-              `• Líquido Atual: ${liqH}\n` +
-              `• Líquido com Novo Custeio: ${liqN}\n` +
-              `• Variação no Bolso: ${dif}/mês (${difPct})\n` +
-              `• Parecer Econômico: ${verdict}\n\n` +
-              `ℹ️ _Simulação independente para fins exclusivamente elucidativos baseada na proposta CAIXA de 16/09/2026._`;
+  let msg = `*Simulação de Contracheque CAIXA (Líquido)*\n` +
+            `• Salário Base: R$ ${sal}\n` +
+            `• Contribuição FUNCEF: ${funcef}\n` +
+            `• Líquido Atual: ${liqH}\n` +
+            `• Líquido Proposta Nova: ${liqN}\n` +
+            `• Variação Mensal no Bolso: ${dif}/mês (${difPct})\n`;
+
+  if (anualDif) {
+    msg += `• Variação Anual Saúde CAIXA (13 mensalidades): ${anualDif}/ano\n`;
+  }
+
+  msg += `• Parecer Econômico: ${verdict}\n\n` +
+         `ℹ️ _Simulação independente para fins exclusivamente elucidativos baseada em dados oficiais da CAIXA Notícias e das entidades sindicais (CONTRAF-CUT, FENAE, SPBancários)._`;
 
   navigator.clipboard.writeText(msg).then(() => {
-    alert('Resumo copiado com sucesso com a nota elucidativa de 16/09/2026 inclusa!');
+    alert('Resumo copiado com sucesso com notas elucidativas e impacto anual inclusos!');
   });
 }
 
