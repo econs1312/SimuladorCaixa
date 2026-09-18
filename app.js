@@ -127,7 +127,7 @@ function recalcular() {
   const irrfInfoHoje = calcularIrrfOficial(salarioBase, inssHoje, funcefHoje, depsParaIrrf);
   const irrfHoje = irrfInfoHoje.valor;
 
-  const totalDescontosHoje = inssHoje + funcefHoje + titularHoje + depDiretoHoje - reducaoTetoHoje + depForaHoje + irrfHoje + outrosDesc;
+  const totalDescontosHoje = inssHoje + funcefHoje + subtotalDiretosHoje + depForaHoje + irrfHoje + outrosDesc;
   const liquidoHoje = salarioBase - totalDescontosHoje;
 
   // ============================================
@@ -173,7 +173,7 @@ function recalcular() {
   const irrfInfoNovo = calcularIrrfOficial(salarioNovo, inssNovo, funcefNovo, depsParaIrrf);
   const irrfNovo = irrfInfoNovo.valor;
 
-  const totalDescontosNovo = inssNovo + funcefNovo + titularNovo + depDiretoNovo - reducaoTetoNovo + depForaNovo + irrfNovo + outrosDesc;
+  const totalDescontosNovo = inssNovo + funcefNovo + subtotalDiretosNovo + depForaNovo + irrfNovo + outrosDesc;
   const liquidoNovo = salarioNovo - totalDescontosNovo;
 
   // ============================================
@@ -209,29 +209,31 @@ function recalcular() {
   }
   document.getElementById('tbFuncefPctInfo').innerText = funcefSubMsg;
 
-  document.getElementById('tbSaudeTitHoje').innerText = fmtMoeda(titularHoje);
-  document.getElementById('tbSaudeTitNovo').innerText = fmtMoeda(titularNovo);
-  document.getElementById('tbSaudeTitDif').innerText = `+${fmtMoeda(titularNovo - titularHoje)}`;
+  // Saúde CAIXA Diretos (Titular + Dependentes Diretos)
+  const difDiretos = subtotalDiretosNovo - subtotalDiretosHoje;
+  document.getElementById('tbSaudeDiretosHoje').innerText = fmtMoeda(subtotalDiretosHoje);
+  document.getElementById('tbSaudeDiretosNovo').innerText = fmtMoeda(subtotalDiretosNovo);
+  const elSaudeDiretosDif = document.getElementById('tbSaudeDiretosDif');
+  elSaudeDiretosDif.innerText = (difDiretos >= 0 ? '+' : '') + fmtMoeda(difDiretos);
+  elSaudeDiretosDif.className = `p-3 text-right font-bold ${difDiretos > 0 ? 'text-rose-600' : (difDiretos < 0 ? 'text-emerald-600' : 'text-slate-500')}`;
 
-  document.getElementById('tbSaudeDepDirHoje').innerText = fmtMoeda(depDiretoHoje);
-  document.getElementById('tbSaudeDepDirNovo').innerText = fmtMoeda(depDiretoNovo);
-  document.getElementById('tbSaudeDepDirDif').innerText = (depDiretoNovo - depDiretoHoje >= 0 ? '+' : '') + fmtMoeda(depDiretoNovo - depDiretoHoje);
-
-  // Linha de Alívio da Trava de Teto (valores negativos em verde)
-  document.getElementById('tbSaudeSubtHoje').innerText = reducaoTetoHoje > 0 ? `-${fmtMoeda(reducaoTetoHoje)}` : 'R$ 0,00';
-  document.getElementById('tbSaudeSubtNovo').innerText = reducaoTetoNovo > 0 ? `-${fmtMoeda(reducaoTetoNovo)}` : 'R$ 0,00';
-  const difAlivio = reducaoTetoNovo - reducaoTetoHoje;
-  document.getElementById('tbSaudeSubtDif').innerText = (difAlivio > 0 ? '-' : (difAlivio < 0 ? '+' : '')) + fmtMoeda(Math.abs(difAlivio));
-
-  if (bateuTetoNovo) {
-    document.getElementById('tbTravaTetoMsg').innerText = depsExcedentesNovo > 0 
-      ? `Teto de 9,0% atingido + ${depsExcedentesNovo} dep. excedente(s) a R$ 50 cada (Alívio: ${fmtMoeda(reducaoTetoNovo)})`
-      : `Limitado à trava do teto de 9,0% (Alívio: ${fmtMoeda(reducaoTetoNovo)})`;
-  } else if (depDiretos > 0) {
-    document.getElementById('tbTravaTetoMsg').innerText = 'Dentro do limite de 9,0% (sem necessidade de trava)';
+  let travaMsg = '';
+  if (depDiretos === 0) {
+    travaMsg = 'Titular (Hoje: 3,5% • Novo: 3,7%) sem dependentes diretos';
+  } else if (bateuTetoNovo) {
+    if (depsExcedentesNovo > 0) {
+      travaMsg = `Limitado ao teto de 9,0% (${fmtMoeda(tetoNovo)}) + ${depsExcedentesNovo} excedente(s) a R$ 50 cada (Sem teto seria ${fmtMoeda(custoBaseDiretosNovo)} • Economia do teto: ${fmtMoeda(reducaoTetoNovo)})`;
+    } else {
+      travaMsg = `Limitado à trava do teto de 9,0% (Sem teto seria ${fmtMoeda(custoBaseDiretosNovo)} • Economia do teto: ${fmtMoeda(reducaoTetoNovo)})`;
+    }
   } else {
-    document.getElementById('tbTravaTetoMsg').innerText = 'Sem dependentes diretos cadastrados';
+    if (reducaoTetoHoje > 0) {
+      travaMsg = `Hoje limitado a 7% (${fmtMoeda(tetoHoje)}). No novo modelo, dentro do teto de 9% (${fmtMoeda(tetoNovo)}).`;
+    } else {
+      travaMsg = `Titular (3,7%) + ${depDiretos} dep. direto(s) (R$ 560 cada), dentro da trava do teto de 9,0%.`;
+    }
   }
+  document.getElementById('tbTravaTetoMsg').innerText = travaMsg;
 
   document.getElementById('tbSaudeForaHoje').innerText = fmtMoeda(depForaHoje);
   document.getElementById('tbSaudeForaNovo').innerText = fmtMoeda(depForaNovo);
