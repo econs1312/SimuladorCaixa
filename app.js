@@ -508,17 +508,14 @@ function aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxa
   cardDifPct.className = `text-xs font-bold ${difLiquido >= 0 ? 'text-emerald-700' : 'text-rose-700'}`;
 
   if (impactoPlanoPp < taxaRealPp) {
-    const ganhoRealRemanescentePp = taxaRealPp - impactoPlanoPp;
-    const valorGanhoReal = salarioBase * (ganhoRealRemanescentePp / 100);
-
     card.className = "rounded-2xl p-6 border shadow-sm bg-emerald-50/70 border-emerald-300";
     badge.className = "text-xs font-extrabold uppercase px-2.5 py-1 rounded-md bg-emerald-200 text-emerald-900";
-    badge.innerText = "Ganho Real Preservado";
+    badge.innerText = "Saldo Positivo";
     title.className = "text-2xl font-black mt-2 text-emerald-950";
-    title.innerText = `Ganho Real Efetivo: +${ganhoRealRemanescentePp.toFixed(2)} p.p.`;
+    title.innerText = `Saldo Positivo no Bolso: +${fmtMoeda(difLiquido)}/mês`;
     icon.className = "text-3xl text-emerald-600";
     icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-    desc.innerText = `O reajuste cobriu com folga o aumento do Saúde CAIXA (+${impactoPlanoPp.toFixed(2)} p.p. da remuneração). A reposição integral da inflação (${inpcPp.toFixed(2)}% do INPC) foi mantida e ainda resta um ganho real líquido positivo estimado em ${fmtMoeda(valorGanhoReal)}/mês no seu poder de compra.`;
+    desc.innerText = `O reajuste salarial (+${reajusteBrutoPp.toFixed(2)}%, composto por ${inpcPp.toFixed(2)}% de reposição da inflação e apenas ${taxaRealPp.toFixed(2)}% de aumento real) cobre o novo custeio do Saúde CAIXA (+${impactoPlanoPp.toFixed(2)} p.p.), garantindo um saldo líquido positivo de ${fmtMoeda(difLiquido)}/mês no seu contracheque.`;
 
   } else if (difLiquido > 0) {
     const corrosaoInpcPp = Math.min(inpcPp, impactoPlanoPp - taxaRealPp);
@@ -526,24 +523,24 @@ function aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxa
 
     card.className = "rounded-2xl p-6 border shadow-sm bg-amber-50/80 border-amber-300";
     badge.className = "text-xs font-extrabold uppercase px-2.5 py-1 rounded-md bg-amber-200 text-amber-900";
-    badge.innerText = "Ganho Real Anulado (0,00%)";
+    badge.innerText = "Saldo Positivo Parcial";
     title.className = "text-2xl font-black mt-2 text-amber-950";
-    title.innerText = "Sem Aumento Real • Corrosão do INPC";
+    title.innerText = `Saldo Positivo Nominal: +${fmtMoeda(difLiquido)}/mês`;
     icon.className = "text-3xl text-amber-600";
     icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-    desc.innerText = `O aumento do Saúde CAIXA (+${impactoPlanoPp.toFixed(2)} p.p.) superou totalmente os ${taxaRealPp.toFixed(2)}% de aumento real, zerando o ganho no poder de compra. Embora seu contracheque nominal receba ${fmtMoeda(difLiquido)} a mais, o plano confiscou ${corrosaoInpcPp.toFixed(2)} p.p. da reposição da inflação (${fmtMoeda(perdaInflacionariaMensal)}/mês que deveriam repor o custo de vida).`;
+    desc.innerText = `Embora seu contracheque receba ${fmtMoeda(difLiquido)} a mais por mês, o custo adicional do Saúde CAIXA (+${impactoPlanoPp.toFixed(2)} p.p.) consumiu integralmente os ${taxaRealPp.toFixed(2)}% de aumento real e confiscou ${corrosaoInpcPp.toFixed(2)} p.p. da reposição da inflação (${fmtMoeda(perdaInflacionariaMensal)}/mês que deveriam repor o poder de compra corroído pelo INPC).`;
 
   } else {
     const perdaLiquida = Math.abs(difLiquido);
 
     card.className = "rounded-2xl p-6 border shadow-sm bg-rose-50/80 border-rose-300";
     badge.className = "text-xs font-extrabold uppercase px-2.5 py-1 rounded-md bg-rose-200 text-rose-900";
-    badge.innerText = "Prejuízo Líquido";
+    badge.innerText = "Saldo Negativo";
     title.className = "text-2xl font-black mt-2 text-rose-950";
-    title.innerText = "Perda Nominal no Bolso";
+    title.innerText = `Saldo Negativo: -${fmtMoeda(perdaLiquida)}/mês`;
     icon.className = "text-3xl text-rose-600";
     icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
-    desc.innerText = `Todo o reajuste salarial concedido (${reajusteBrutoPp.toFixed(2)}%) foi insuficiente para pagar a nova tabela do plano de saúde. O seu salário líquido no bolso encolhe ${fmtMoeda(perdaLiquida)} por mês a partir de 2027.`;
+    desc.innerText = `O reajuste salarial total (+${reajusteBrutoPp.toFixed(2)}%) foi insuficiente para pagar a nova tabela do plano de saúde. O seu salário líquido no bolso tem uma redução de ${fmtMoeda(perdaLiquida)} por mês.`;
   }
 }
 
@@ -574,7 +571,7 @@ function gerarTextoResumo() {
            `• *Termômetro da Decisão:* ${statusDecisao}\n`;
   }
 
-  msg += `• Diagnóstico Econômico: ${verdict}\n\n` +
+  msg += `• Resultado da Proposta: ${verdict}\n\n` +
          `ℹ️ _Simulação independente para subsidiar o voto em assembleia fundamentada em dados oficiais da CAIXA Notícias e das entidades sindicais (CONTRAF-CUT, FENAE, SPBancários)._`;
 
   return msg;
