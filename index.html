@@ -52,6 +52,46 @@
 
     <!-- Coluna de Entradas (5 colunas) -->
     <div class="lg:col-span-5 space-y-5">
+
+      <!-- Seletor Rápido de Perfis / Personas -->
+      <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-blue-900 text-white rounded-2xl shadow-sm border border-blue-800/40 p-4">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-user-gear text-amber-400 text-sm"></i>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Simulação Rápida por Perfil</span>
+          </div>
+          <span class="text-[10px] bg-blue-600/60 text-blue-200 px-2 py-0.5 rounded font-bold uppercase">1 Clique</span>
+        </div>
+        <p class="text-[11px] text-slate-300 leading-snug mb-3">
+          Selecione um perfil típico da CAIXA para preencher os dados instantaneamente:
+        </p>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="aplicarPerfil('solteiro')" id="btnPerfilSolteiro" class="btn-perfil text-left p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition group">
+            <div class="text-xs font-bold text-white group-hover:text-amber-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-user text-blue-300 text-[11px]"></i> Novo / Solteiro
+            </div>
+            <div class="text-[10px] text-slate-300 mt-0.5">R$ 5k • Sem dependentes</div>
+          </button>
+          <button type="button" onclick="aplicarPerfil('familia')" id="btnPerfilFamilia" class="btn-perfil text-left p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition group">
+            <div class="text-xs font-bold text-white group-hover:text-amber-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-people-roof text-emerald-300 text-[11px]"></i> Família Direta
+            </div>
+            <div class="text-[10px] text-slate-300 mt-0.5">R$ 8,5k • Cônjuge + 1 filho</div>
+          </button>
+          <button type="button" onclick="aplicarPerfil('universitario')" id="btnPerfilUniv" class="btn-perfil text-left p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition group">
+            <div class="text-xs font-bold text-white group-hover:text-amber-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-graduation-cap text-purple-300 text-[11px]"></i> Filhos Univ.
+            </div>
+            <div class="text-[10px] text-slate-300 mt-0.5">R$ 16k • Filho 21-24 anos</div>
+          </button>
+          <button type="button" onclick="aplicarPerfil('aposentado')" id="btnPerfilAposentado" class="btn-perfil text-left p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition group">
+            <div class="text-xs font-bold text-white group-hover:text-amber-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-umbrella-beach text-amber-300 text-[11px]"></i> Aposentado
+            </div>
+            <div class="text-[10px] text-slate-300 mt-0.5">R$ 6k • Sem benefícios ativa</div>
+          </button>
+        </div>
+      </div>
       
       <!-- Bloco Salarial & Reajuste -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
@@ -94,6 +134,39 @@
           </div>
         </div>
       </div>
+
+      <!-- Bloco Benefício Alimentação (VA/VR) -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-utensils text-blue-600"></i> Benefício Alimentação (VA/VR)
+            </h2>
+            <p class="text-[11px] text-slate-500 mt-0.5">Reajustado pelo ACT e 100% livre de IRRF e INSS</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="incluirVaVr" checked class="sr-only peer" onchange="recalcular()">
+            <div class="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+
+        <div id="blocoVaVrInputs" class="mt-3 space-y-3">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-xs font-bold text-slate-600 uppercase">Valor Mensal Atual (R$)</label>
+              <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold border border-emerald-200">13 parcelas/ano</span>
+            </div>
+            <div class="relative">
+              <span class="absolute left-3 top-2 text-slate-400 text-xs font-bold">R$</span>
+              <input type="number" id="valorVaVr" value="2050" step="50" min="0"
+                class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-9 pr-3 py-1.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                oninput="recalcular()">
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">12 meses + 13ª Cesta Alimentação. Reajuste de 4,60% = +R$ 94,30/mês líquidos.</p>
+          </div>
+        </div>
+      </div>
+
 
       <!-- Bloco FUNCEF & Outros Descontos -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
@@ -361,8 +434,200 @@
         </div>
       </div>
 
+      <!-- Card Balanço Anual Consolidado & Termômetro do Bolso -->
+      <div id="cardBalancoAnual" class="rounded-2xl p-5 border shadow-sm transition-all duration-300 bg-white border-slate-200">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div id="iconTermometro" class="w-8 h-8 rounded-full flex items-center justify-center text-base bg-blue-100 text-blue-700">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-slate-900">Balanço Anual Geral & Termômetro do Bolso</h4>
+              <p class="text-[11px] text-slate-500">Salários líquidos (12m + 13º + 1/3 férias) + VA/VR reajustado - Saúde 13x</p>
+            </div>
+          </div>
+          <span id="badgeTermometro" class="text-[10px] uppercase font-black px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">
+            Calculando
+          </span>
+        </div>
+
+        <!-- Grade com os 3 Pilares Anuais -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-3 text-xs">
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">+ Salários Líquidos</span>
+            <p id="balancoSalarioLiq" class="text-sm font-black text-emerald-700 mt-0.5">+R$ 0,00</p>
+            <span class="text-[9px] text-slate-400 block">12 meses + 13º + 1/3 férias</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">+ Reajuste VA/VR</span>
+            <p id="balancoVaVr" class="text-sm font-black text-emerald-700 mt-0.5">+R$ 0,00</p>
+            <span id="balancoVaVrSub" class="text-[9px] text-slate-400 block">13 parcelas livres de imposto</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">- Saúde CAIXA</span>
+            <p id="balancoSaudeDif" class="text-sm font-black text-rose-600 mt-0.5">+R$ 0,00</p>
+            <span class="text-[9px] text-slate-400 block">13 mensalidades anuais</span>
+          </div>
+        </div>
+
+        <!-- Saldo Consolidado em Destaque -->
+        <div class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="text-[10px] uppercase font-extrabold text-slate-500 block">SALDO LÍQUIDO CONSOLIDADO NO ANO (12 MESES)</span>
+            <span id="descTermometro" class="text-xs text-slate-600 font-medium leading-tight">Análise do patrimônio financeiro no bolso</span>
+          </div>
+          <div class="text-left sm:text-right">
+            <div id="saldoAnualTotal" class="text-xl font-black text-slate-900">+R$ 0,00 / ano</div>
+            <span id="saldoAnualMensalEq" class="text-[10px] font-bold text-slate-500">equivalente a +R$ 0,00/mês</span>
+          </div>
+        </div>
+
+        <!-- Barra Visual do Termômetro da Decisão -->
+        <div class="mt-4 pt-3 border-t border-slate-100">
+          <div class="flex justify-between items-center text-[10px] font-extrabold mb-1">
+            <span class="text-rose-600"><i class="fa-solid fa-circle-xmark mr-1"></i>Prejuízo Anual</span>
+            <span class="text-amber-600 font-bold">Empate / Alerta</span>
+            <span class="text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i>Ganho Real Anual</span>
+          </div>
+          <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden relative">
+            <div id="barraTermometro" class="h-full rounded-full transition-all duration-500 bg-emerald-500" style="width: 50%;"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
+
+  <!-- Seção Matriz de Decisão: Aprovação vs Rejeição -->
+  <section id="matriz-decisao" class="max-w-6xl mx-auto px-4 mt-8">
+    <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-check-to-slot"></i> Subsídio ao Voto em Assembleia
+          </div>
+          <h3 class="text-lg md:text-xl font-extrabold text-slate-900">Matriz de Decisão: O que Muda se Você Aprovar ou Rejeitar a Proposta</h3>
+          <p class="text-slate-500 text-xs mt-1">Comparativo técnico dos impactos econômicos e dos riscos de cada escolha na assembleia:</p>
+        </div>
+        <span class="text-[11px] bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-lg self-start md:self-auto">
+          Visão Estratégica Independente
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+        
+        <!-- CARD CENÁRIO 1: APROVAÇÃO -->
+        <div class="rounded-2xl border-2 border-emerald-300 bg-emerald-50/40 p-5 flex flex-col justify-between shadow-xs">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-emerald-200">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
+                  <i class="fa-solid fa-thumbs-up"></i>
+                </span>
+                <h4 class="font-extrabold text-sm text-emerald-950">Se Você Votar pela APROVAÇÃO</h4>
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-wider bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded">
+                Acordo Fechado
+              </span>
+            </div>
+
+            <!-- Ganhos -->
+            <div class="mt-4 space-y-2.5 text-xs">
+              <div class="font-bold text-emerald-900 text-[11px] uppercase tracking-wide flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-plus text-emerald-600"></i> Ganhos & Garantias Imediatas:
+              </div>
+              <ul class="space-y-1.5 text-slate-700 pl-4 list-disc text-[11px] leading-relaxed">
+                <li><strong>Reajuste Salarial de 4,60%:</strong> 100% do INPC (4,00%) + Ganho Real (0,60%) incidindo sobre 13,33 folhas anuais (salário, 13º e férias).</li>
+                <li><strong>Reajuste de 4,60% no VA/VR:</strong> +R$ 94,30/mês líquidos e livres de tributos (~R$ 1.226 adicionais por ano somando 13 parcelas).</li>
+                <li><strong>Teto Patronal CAIXA elevado para até 9%:</strong> O banco passa a poder arcar com até 9% da folha no plano (antes travado em 6,5%).</li>
+                <li><strong>Déficit de 2026 Coberto pela CAIXA:</strong> A direção do banco assume o déficit financeiro do plano de saúde em 2026.</li>
+                <li><strong>Redução de Coparticipação:</strong> Teto anual cai de R$ 4.800 para R$ 4.700; pronto-socorro cai de R$ 150 para R$ 120; telemedicina 100% gratuita.</li>
+              </ul>
+
+              <!-- Custos -->
+              <div class="font-bold text-slate-800 text-[11px] uppercase tracking-wide flex items-center gap-1.5 pt-2 border-t border-emerald-200">
+                <i class="fa-solid fa-circle-minus text-amber-600"></i> Custos & Contrapartidas:
+              </div>
+              <ul class="space-y-1.5 text-slate-700 pl-4 list-disc text-[11px] leading-relaxed">
+                <li>Mensalidade do titular sobe de 3,5% para 3,7% da remuneração (+0,2 p.p.).</li>
+                <li>Dependentes diretos: R$ 560 cada (com teto familiar de 9% + R$ 50 por dependente excedente).</li>
+                <li>Dependentes indiretos (21-24 anos): R$ 660 cada (fora do teto de 9%).</li>
+                <li>Dependentes especiais (24-27 anos/pais): R$ 900 cada (fora do teto).</li>
+                <li>Cobrança mantida de 13 mensalidades anuais (12 meses + 13º salário).</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Impacto no seu caso -->
+          <div class="mt-4 pt-3 border-t border-emerald-200 bg-white/70 p-3 rounded-xl">
+            <span class="text-[10px] uppercase font-extrabold text-slate-500 block">Impacto no seu Bolso (Conforme Simulação):</span>
+            <div id="boxDecisaoAprovar" class="text-xs font-bold text-emerald-800 mt-0.5">
+              Calculando...
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD CENÁRIO 2: REJEIÇÃO -->
+        <div class="rounded-2xl border-2 border-slate-300 bg-slate-50/80 p-5 flex flex-col justify-between shadow-xs">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-full bg-slate-600 text-white flex items-center justify-center text-xs font-bold">
+                  <i class="fa-solid fa-hand"></i>
+                </span>
+                <h4 class="font-extrabold text-sm text-slate-900">Se Você Votar pela REJEIÇÃO</h4>
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-wider bg-slate-200 text-slate-800 px-2 py-0.5 rounded">
+                Manutenção / Dissídio
+              </span>
+            </div>
+
+            <!-- O que permanece -->
+            <div class="mt-4 space-y-2.5 text-xs">
+              <div class="font-bold text-slate-900 text-[11px] uppercase tracking-wide flex items-center gap-1.5">
+                <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> O que Permanece Temporariamente:
+              </div>
+              <ul class="space-y-1.5 text-slate-700 pl-4 list-disc text-[11px] leading-relaxed">
+                <li><strong>Mensalidade Titular mantida em 3,5%</strong> (não sobre para 3,7%).</li>
+                <li><strong>Dependentes mantidos em R$ 480</strong> por vida (não sobem para R$ 560/660/900).</li>
+                <li><strong>Teto familiar mantido em 7%</strong> da remuneração base para titulares com dependentes diretos.</li>
+              </ul>
+
+              <!-- Riscos e Perdas -->
+              <div class="font-bold text-rose-900 text-[11px] uppercase tracking-wide flex items-center gap-1.5 pt-2 border-t border-slate-200">
+                <i class="fa-solid fa-triangle-exclamation text-rose-600"></i> Riscos Financeiros & Atuariais Críticos:
+              </div>
+              <ul class="space-y-1.5 text-slate-700 pl-4 list-disc text-[11px] leading-relaxed">
+                <li><strong>Sem Reajuste Salarial Imediato:</strong> Não há aplicação imediata dos 4,60% em folha, dependendo de nova rodada, greve ou decisão de dissídio na Justiça.</li>
+                <li><strong>Sem Reajuste no VA/VR:</strong> Perda imediata dos +R$ 94,30/mês líquidos (+R$ 1.226/ano) em alimentação.</li>
+                <li><strong>Risco Atuarial do Plano:</strong> A CAIXA não eleva o teto patronal para 9% nem assume o déficit de 2026. Há risco real de chamadas extras de déficit sobre ativos e aposentados.</li>
+                <li><strong>Coparticipação sem Redução:</strong> Teto anual segue em R$ 4.800 e pronto-socorro permanece em R$ 150 por atendimento.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Impacto no seu caso -->
+          <div class="mt-4 pt-3 border-t border-slate-200 bg-white/70 p-3 rounded-xl">
+            <span class="text-[10px] uppercase font-extrabold text-slate-500 block">Impacto no seu Bolso (Conforme Simulação):</span>
+            <div id="boxDecisaoRejeitar" class="text-xs font-bold text-slate-700 mt-0.5">
+              Calculando...
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Conclusão Independente -->
+      <div class="mt-5 p-4 rounded-xl bg-blue-50/60 border border-blue-200 text-xs text-blue-950 flex items-start gap-3">
+        <i class="fa-solid fa-compass text-blue-700 text-base mt-0.5 flex-shrink-0"></i>
+        <div class="leading-relaxed">
+          <strong class="text-blue-950">Como Subsidiar sua Decisão:</strong> Observe o <strong>Saldo Anual Consolidado</strong> acima. Para empregados sem dependentes ou com poucos dependentes diretos, o reajuste salarial somado ao VA/VR costuma superar com folga o reajuste do Saúde CAIXA, gerando saldo positivo no patrimônio. Para empregados com dependentes de 21 a 24 anos (R$ 660 fora do teto) ou múltiplos dependentes, o novo plano consome parcela expressiva do reajuste, exigindo ponderar se a elevação do teto patronal da CAIXA para 9% e a cobertura do déficit compensam o aumento da fatura mensal.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
 
   <!-- Seção Comparativo Oficial CAIXA: Avanços & Regras Complementares -->
   <section class="max-w-6xl mx-auto px-4 mt-8">

@@ -15,20 +15,25 @@ Este projeto está hospedado e integrado à **[Vercel](https://vercel.com)**:
 
 ## 📊 Funcionalidades
 
+- **Subsídio à Tomada de Decisão Coletiva (Aprovar vs. Rejeitar):**
+  - **Matriz de Decisão Lado a Lado:** Apresentação clara e imparcial de ganhos, contrapartidas e riscos nos cenários de Aprovação e Rejeição do ACT.
+  - **Balanço Anual Consolidado (12 Meses):** Equação completa somando 12 salários, 13º salário, 1/3 constitucional de férias, 13 parcelas de VA/VR reajustadas (livres de imposto) e as 13 mensalidades oficiais do Saúde CAIXA.
+  - **Termômetro da Decisão no Bolso:** Indicador visual inteligente (Saldo Positivo, Zona de Alerta/Empate, Saldo Negativo) demonstrando se a proposta gera ganho ou perda patrimonial no ano.
+  - **Simulação Rápida por Perfis (Personas):** 1 clique para carregar cenários típicos (*Novo/Solteiro*, *Família Direta*, *Filhos Universitários*, *Aposentado/Pensionista*).
 - **Cálculo de Remuneração e Reajuste:**
-  - Aplicação de INPC e Ganho Real sobre o Salário Base e Função/Cargo em Comissão.
-  - Seleção rápida de faixas salariais comuns.
+  - Aplicação de INPC (4,00%) e Ganho Real (0,60%) sobre o Salário Base e Funções Gratificadas.
+  - Seleção rápida de faixas salariais (5k a 30k).
 - **Deduções Obrigatórias e Oficiais:**
   - **INSS:** Tabela progressiva oficial com aplicação de teto.
   - **IRRF:** Tabela progressiva com dedução por dependentes e previdência, aplicando a opção mais vantajosa (Dedução Legal vs. Desconto Simplificado).
 - **FUNCEF Customizável:**
-  - Ajuste dinâmico de alíquota contributiva (0% a 12%+).
+  - Ajuste dinâmico de alíquota contributiva (0% a 16%), com alerta de trava legal de 12% para dedução tributária.
 - **Saúde CAIXA (Novo Custeio):**
-  - Simulação da mensalidade titular e dependentes conforme as diretrizes negociadas.
-- **Análise de Ganho Real Efetivo:**
-  - Comparativo detalhado entre o cenário atual e o novo custeio proposto ("Hoje" vs. "Novo Custeio"), demonstrando se há ganho real líquido ou corrosão da recomposição inflacionária.
-- **Design Responsivo:**
-  - Interface moderna otimizada para desktops, tablets e smartphones.
+  - Mensalidade titular de 3,7%, dependentes diretos a R$ 560 com trava de 9% da remuneração e piso de R$ 50 para excedentes.
+  - Dependentes indiretos 21-24 anos (R$ 660) e especiais (R$ 900) fora do teto familiar.
+  - 13 mensalidades anuais (12 regulares + 13º salário).
+- **Design Responsivo & Compartilhamento:**
+  - Interface moderna adaptada para celulares e computadores com botão de "Copiar Demonstrativo" pronto para grupos de WhatsApp.
 
 ---
 

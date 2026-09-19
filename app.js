@@ -77,6 +77,57 @@ function fmtMoeda(val) {
   return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+// Seletor Rápido de Perfis / Personas
+function aplicarPerfil(tipo) {
+  ['btnPerfilSolteiro', 'btnPerfilFamilia', 'btnPerfilUniv', 'btnPerfilAposentado'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('perfil-ativo');
+  });
+
+  if (tipo === 'solteiro') {
+    document.getElementById('salarioBase').value = 5000;
+    document.getElementById('depDiretos').value = 0;
+    document.getElementById('depIndiretos').value = 0;
+    document.getElementById('depEspeciais').value = 0;
+    document.getElementById('aliquotaFuncef').value = 8;
+    document.getElementById('funcefLabel').innerText = '8.0%';
+    if (document.getElementById('incluirVaVr')) document.getElementById('incluirVaVr').checked = true;
+    const btn = document.getElementById('btnPerfilSolteiro');
+    if (btn) btn.classList.add('perfil-ativo');
+  } else if (tipo === 'familia') {
+    document.getElementById('salarioBase').value = 8500;
+    document.getElementById('depDiretos').value = 2;
+    document.getElementById('depIndiretos').value = 0;
+    document.getElementById('depEspeciais').value = 0;
+    document.getElementById('aliquotaFuncef').value = 8;
+    document.getElementById('funcefLabel').innerText = '8.0%';
+    if (document.getElementById('incluirVaVr')) document.getElementById('incluirVaVr').checked = true;
+    const btn = document.getElementById('btnPerfilFamilia');
+    if (btn) btn.classList.add('perfil-ativo');
+  } else if (tipo === 'universitario') {
+    document.getElementById('salarioBase').value = 16000;
+    document.getElementById('depDiretos').value = 1;
+    document.getElementById('depIndiretos').value = 1;
+    document.getElementById('depEspeciais').value = 0;
+    document.getElementById('aliquotaFuncef').value = 10;
+    document.getElementById('funcefLabel').innerText = '10.0%';
+    if (document.getElementById('incluirVaVr')) document.getElementById('incluirVaVr').checked = true;
+    const btn = document.getElementById('btnPerfilUniv');
+    if (btn) btn.classList.add('perfil-ativo');
+  } else if (tipo === 'aposentado') {
+    document.getElementById('salarioBase').value = 6000;
+    document.getElementById('depDiretos').value = 1;
+    document.getElementById('depIndiretos').value = 0;
+    document.getElementById('depEspeciais').value = 0;
+    document.getElementById('aliquotaFuncef').value = 0;
+    document.getElementById('funcefLabel').innerText = '0.0%';
+    if (document.getElementById('incluirVaVr')) document.getElementById('incluirVaVr').checked = false;
+    const btn = document.getElementById('btnPerfilAposentado');
+    if (btn) btn.classList.add('perfil-ativo');
+  }
+  recalcular();
+}
+
 function recalcular() {
   const salarioBase = parseFloat(document.getElementById('salarioBase').value) || 0;
   const inpc = (parseFloat(document.getElementById('taxaInpc').value) || 0) / 100;
@@ -93,6 +144,12 @@ function recalcular() {
   const depIndiretos = parseInt(document.getElementById('depIndiretos').value) || 0;
   const depEspeciais = parseInt(document.getElementById('depEspeciais').value) || 0;
   const depIndiretosUniv = document.getElementById('depIndiretosUniv') ? document.getElementById('depIndiretosUniv').checked : true;
+
+  // Benefício Alimentação (VA/VR)
+  const incluirVaVr = document.getElementById('incluirVaVr') ? document.getElementById('incluirVaVr').checked : true;
+  const valorVaVr = parseFloat(document.getElementById('valorVaVr') ? document.getElementById('valorVaVr').value : 2050) || 0;
+  const difVaVrMensal = incluirVaVr ? (valorVaVr * reajusteTotal) : 0;
+  const difVaVrAnual = difVaVrMensal * 13; // 12 meses + 13ª Cesta Alimentação
 
   // Dependentes legais com dedução no IRRF (R$ 189,59/mês)
   // Diretos + Indiretos Universitários (Lei 9.250/95 art. 35)
@@ -205,6 +262,53 @@ function recalcular() {
     elSaudeAnualDif.className = `text-base font-extrabold mt-1 ${difSaudeAnual > 0 ? 'text-rose-400' : (difSaudeAnual < 0 ? 'text-emerald-400' : 'text-slate-300')}`;
   }
 
+  // ============================================
+  // 4. BALANÇO ANUAL CONSOLIDADO & SUBSÍDIO À DECISÃO
+  // ============================================
+  // 13,33 remunerações líquidas ao ano (12 meses regulares + 13º salário + 1/3 de férias constitucional)
+  const folhasAnuais = 13 + (1 / 3);
+  const ganhoSalarialLiqAnual = difLiquido * folhasAnuais;
+  const saldoAnualTotal = ganhoSalarialLiqAnual + (incluirVaVr ? difVaVrAnual : 0) - difSaudeAnual;
+  const saldoAnualMensalEq = saldoAnualTotal / 12;
+
+  const elBalancoSalario = document.getElementById('balancoSalarioLiq');
+  const elBalancoVaVr = document.getElementById('balancoVaVr');
+  const elBalancoVaVrSub = document.getElementById('balancoVaVrSub');
+  const elBalancoSaude = document.getElementById('balancoSaudeDif');
+  const elSaldoAnualTotal = document.getElementById('saldoAnualTotal');
+  const elSaldoAnualMensalEq = document.getElementById('saldoAnualMensalEq');
+
+  if (elBalancoSalario) {
+    elBalancoSalario.innerText = (ganhoSalarialLiqAnual >= 0 ? '+' : '') + fmtMoeda(ganhoSalarialLiqAnual);
+    elBalancoSalario.className = `text-sm font-black mt-0.5 ${ganhoSalarialLiqAnual >= 0 ? 'text-emerald-700' : 'text-rose-600'}`;
+  }
+  if (elBalancoVaVr) {
+    if (incluirVaVr) {
+      elBalancoVaVr.innerText = `+${fmtMoeda(difVaVrAnual)}`;
+      elBalancoVaVr.className = 'text-sm font-black text-emerald-700 mt-0.5';
+      if (elBalancoVaVrSub) elBalancoVaVrSub.innerText = `+${fmtMoeda(difVaVrMensal)}/mês (13 parcelas livres)`;
+    } else {
+      elBalancoVaVr.innerText = 'R$ 0,00';
+      elBalancoVaVr.className = 'text-sm font-black text-slate-400 mt-0.5';
+      if (elBalancoVaVrSub) elBalancoVaVrSub.innerText = 'Não considerado nesta simulação';
+    }
+  }
+  if (elBalancoSaude) {
+    elBalancoSaude.innerText = (difSaudeAnual >= 0 ? '+' : '') + fmtMoeda(difSaudeAnual);
+    elBalancoSaude.className = `text-sm font-black mt-0.5 ${difSaudeAnual > 0 ? 'text-rose-600' : (difSaudeAnual < 0 ? 'text-emerald-700' : 'text-slate-500')}`;
+  }
+  if (elSaldoAnualTotal) {
+    elSaldoAnualTotal.innerText = (saldoAnualTotal >= 0 ? '+' : '') + fmtMoeda(saldoAnualTotal) + ' / ano';
+    elSaldoAnualTotal.className = `text-xl font-black ${saldoAnualTotal >= 0 ? 'text-emerald-700' : 'text-rose-700'}`;
+  }
+  if (elSaldoAnualMensalEq) {
+    elSaldoAnualMensalEq.innerText = `equivalente a ${(saldoAnualMensalEq >= 0 ? '+' : '')}${fmtMoeda(saldoAnualMensalEq)}/mês no bolso`;
+    elSaldoAnualMensalEq.className = `text-[10px] font-bold ${saldoAnualMensalEq >= 0 ? 'text-emerald-700' : 'text-rose-700'}`;
+  }
+
+  // Atualização do Termômetro e Matriz de Decisão
+  atualizarTermometroEDecisao(saldoAnualTotal, ganhoSalarialLiqAnual, difSaudeAnual, difLiquido, incluirVaVr, difVaVrAnual);
+
   // Atualização da Tabela de Folha
   document.getElementById('tbSalHoje').innerText = fmtMoeda(salarioBase);
   document.getElementById('tbSalNovo').innerText = fmtMoeda(salarioNovo);
@@ -279,6 +383,96 @@ function recalcular() {
   aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxaReal, salarioNovo, liquidoHoje, liquidoNovo);
 }
 
+function atualizarTermometroEDecisao(saldoAnualTotal, ganhoSalarialLiqAnual, difSaudeAnual, difLiquido, incluirVaVr, difVaVrAnual) {
+  const badge = document.getElementById('badgeTermometro');
+  const icon = document.getElementById('iconTermometro');
+  const desc = document.getElementById('descTermometro');
+  const barra = document.getElementById('barraTermometro');
+  const card = document.getElementById('cardBalancoAnual');
+  const boxAprovar = document.getElementById('boxDecisaoAprovar');
+  const boxRejeitar = document.getElementById('boxDecisaoRejeitar');
+
+  if (saldoAnualTotal > 600) {
+    if (badge) {
+      badge.className = "text-[10px] uppercase font-black px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800";
+      badge.innerText = "Saldo Anual Positivo";
+    }
+    if (icon) {
+      icon.className = "w-8 h-8 rounded-full flex items-center justify-center text-base bg-emerald-100 text-emerald-700";
+      icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+    }
+    if (desc) {
+      desc.innerText = "A soma dos aumentos salariais e benefícios cobre todas as novas mensalidades do Saúde CAIXA e amplia sua renda anual.";
+    }
+    if (barra) {
+      barra.className = "h-full rounded-full transition-all duration-500 bg-emerald-500";
+      barra.style.width = "88%";
+    }
+    if (card) {
+      card.className = "rounded-2xl p-5 border shadow-sm transition-all duration-300 bg-emerald-50/40 border-emerald-300";
+    }
+  } else if (saldoAnualTotal >= -600 && saldoAnualTotal <= 600) {
+    if (badge) {
+      badge.className = "text-[10px] uppercase font-black px-2.5 py-1 rounded-md bg-amber-100 text-amber-900";
+      badge.innerText = "Zona de Equilíbrio / Alerta";
+    }
+    if (icon) {
+      icon.className = "w-8 h-8 rounded-full flex items-center justify-center text-base bg-amber-100 text-amber-700";
+      icon.innerHTML = '<i class="fa-solid fa-scale-balanced"></i>';
+    }
+    if (desc) {
+      desc.innerText = "O ganho salarial e benefícios praticamente empata com o aumento do plano de saúde no fechamento de 12 meses.";
+    }
+    if (barra) {
+      barra.className = "h-full rounded-full transition-all duration-500 bg-amber-500";
+      barra.style.width = "50%";
+    }
+    if (card) {
+      card.className = "rounded-2xl p-5 border shadow-sm transition-all duration-300 bg-amber-50/40 border-amber-300";
+    }
+  } else {
+    if (badge) {
+      badge.className = "text-[10px] uppercase font-black px-2.5 py-1 rounded-md bg-rose-100 text-rose-900";
+      badge.innerText = "Saldo Anual Negativo";
+    }
+    if (icon) {
+      icon.className = "w-8 h-8 rounded-full flex items-center justify-center text-base bg-rose-100 text-rose-700";
+      icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+    }
+    if (desc) {
+      desc.innerText = "O custo das novas mensalidades do Saúde CAIXA supera os reajustes de salário e benefícios ao longo do ano.";
+    }
+    if (barra) {
+      barra.className = "h-full rounded-full transition-all duration-500 bg-rose-500";
+      barra.style.width = "20%";
+    }
+    if (card) {
+      card.className = "rounded-2xl p-5 border shadow-sm transition-all duration-300 bg-rose-50/40 border-rose-300";
+    }
+  }
+
+  // Atualização dos Boxes da Matriz de Decisão
+  if (boxAprovar) {
+    let detalheAprovar = `• Variação mensal líquida em folha: <strong>${(difLiquido >= 0 ? '+' : '')}${fmtMoeda(difLiquido)}/mês</strong><br>`;
+    if (incluirVaVr) {
+      detalheAprovar += `• Ganho extra em VA/VR: <strong>+${fmtMoeda(difVaVrAnual)}/ano</strong> livres de tributos<br>`;
+    }
+    detalheAprovar += `• Custo adicional do Saúde CAIXA: <strong>${(difSaudeAnual >= 0 ? '+' : '')}${fmtMoeda(difSaudeAnual)}/ano</strong> (13 mensalidades)<br>`;
+    detalheAprovar += `• Resultado financeiro anual: <strong class="${saldoAnualTotal >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${(saldoAnualTotal >= 0 ? '+' : '')}${fmtMoeda(saldoAnualTotal)}/ano no patrimônio</strong>`;
+    boxAprovar.innerHTML = detalheAprovar;
+  }
+
+  if (boxRejeitar) {
+    let detalheRejeitar = `• Mantém o Saúde CAIXA na tabela atual (economia de ${(difSaudeAnual >= 0 ? '+' : '')}${fmtMoeda(difSaudeAnual)}/ano frente à proposta)<br>`;
+    detalheRejeitar += `• Deixa de receber imediatamente <strong>${(ganhoSalarialLiqAnual >= 0 ? '+' : '')}${fmtMoeda(ganhoSalarialLiqAnual)}/ano</strong> de aumento salarial líquido<br>`;
+    if (incluirVaVr) {
+      detalheRejeitar += `• Deixa de receber <strong>+${fmtMoeda(difVaVrAnual)}/ano</strong> de reajuste no VA/VR<br>`;
+    }
+    detalheRejeitar += `• Mantém o risco atuarial de chamada extraordinária para cobertura do déficit de 2026`;
+    boxRejeitar.innerHTML = detalheRejeitar;
+  }
+}
+
 function aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxaReal, salarioNovo, liquidoHoje, liquidoNovo) {
   const card = document.getElementById('verdictCard');
   const badge = document.getElementById('verdictBadge');
@@ -350,23 +544,29 @@ function copiarResumo() {
   const verdict = document.getElementById('verdictTitle').innerText;
   const funcef = document.getElementById('funcefLabel').innerText;
   const anualDif = document.getElementById('cardSaudeAnualDif') ? document.getElementById('cardSaudeAnualDif').innerText : '';
+  const saldoAnual = document.getElementById('saldoAnualTotal') ? document.getElementById('saldoAnualTotal').innerText : '';
+  const statusDecisao = document.getElementById('badgeTermometro') ? document.getElementById('badgeTermometro').innerText : '';
 
-  let msg = `*Simulação de Contracheque CAIXA (Líquido)*\n` +
+  let msg = `📊 *Simulador CAIXA: Impacto no Bolso (Decisão do ACT)*\n` +
             `• Salário Base: R$ ${sal}\n` +
             `• Contribuição FUNCEF: ${funcef}\n` +
-            `• Líquido Atual: ${liqH}\n` +
-            `• Líquido Proposta Nova: ${liqN}\n` +
-            `• Variação Mensal no Bolso: ${dif}/mês (${difPct})\n`;
+            `• Salário Líquido Atual: ${liqH}\n` +
+            `• Salário Líquido Proposta: ${liqN}\n` +
+            `• Variação Mensal em Folha: ${dif}/mês (${difPct})\n`;
 
   if (anualDif) {
-    msg += `• Variação Anual Saúde CAIXA (13 mensalidades): ${anualDif}/ano\n`;
+    msg += `• Variação Anual Saúde CAIXA (13x): ${anualDif}/ano\n`;
+  }
+  if (saldoAnual) {
+    msg += `• *Saldo Consolidado no Ano (12m + 13º + férias + VA/VR - Saúde 13x):* ${saldoAnual}\n` +
+           `• *Termômetro da Decisão:* ${statusDecisao}\n`;
   }
 
-  msg += `• Parecer Econômico: ${verdict}\n\n` +
-         `ℹ️ _Simulação independente para fins exclusivamente elucidativos baseada em dados oficiais da CAIXA Notícias e das entidades sindicais (CONTRAF-CUT, FENAE, SPBancários)._`;
+  msg += `• Diagnóstico Econômico: ${verdict}\n\n` +
+         `ℹ️ _Simulação independente para subsidiar o voto em assembleia fundamentada em dados oficiais da CAIXA Notícias e das entidades sindicais (CONTRAF-CUT, FENAE, SPBancários)._`;
 
   navigator.clipboard.writeText(msg).then(() => {
-    alert('Resumo copiado com sucesso com notas elucidativas e impacto anual inclusos!');
+    alert('Demonstrativo completo de subsídio à decisão copiado para a área de transferência!');
   });
 }
 
