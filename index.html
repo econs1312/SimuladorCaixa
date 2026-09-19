@@ -49,18 +49,22 @@
   <!-- Barra de Navegação em Abas (Segmented Control Mobile-First) -->
   <nav class="sticky top-0 z-30 bg-slate-100/95 backdrop-blur-md pt-3 pb-2 border-b border-slate-200/80 shadow-xs">
     <div class="max-w-4xl mx-auto px-3 sm:px-4">
-      <div class="grid grid-cols-3 gap-1 p-1 bg-slate-200/90 rounded-2xl border border-slate-300/60 shadow-inner">
-        <button type="button" id="tab-btn-veredito" onclick="trocarAba('veredito')" class="tab-button tab-active flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs sm:text-sm font-black text-blue-900 transition-all">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-slate-200/90 rounded-2xl border border-slate-300/60 shadow-inner">
+        <button type="button" id="tab-btn-veredito" onclick="trocarAba('veredito')" class="tab-button tab-active flex items-center justify-center gap-1.5 py-2 px-1.5 rounded-xl text-xs sm:text-sm font-black text-blue-900 transition-all">
           <i class="fa-solid fa-scale-balanced text-xs sm:text-sm"></i>
-          <span>1. Meu Veredito</span>
+          <span>1. Veredito</span>
         </button>
-        <button type="button" id="tab-btn-contracheque" onclick="trocarAba('contracheque')" class="tab-button flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition-all">
+        <button type="button" id="tab-btn-contracheque" onclick="trocarAba('contracheque')" class="tab-button flex items-center justify-center gap-1.5 py-2 px-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition-all">
           <i class="fa-solid fa-receipt text-xs sm:text-sm"></i>
           <span>2. Contracheque</span>
         </button>
-        <button type="button" id="tab-btn-matriz" onclick="trocarAba('matriz')" class="tab-button flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition-all">
+        <button type="button" id="tab-btn-memorial" onclick="trocarAba('memorial')" class="tab-button flex items-center justify-center gap-1.5 py-2 px-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition-all">
+          <i class="fa-solid fa-calculator text-xs sm:text-sm"></i>
+          <span>3. Memorial</span>
+        </button>
+        <button type="button" id="tab-btn-matriz" onclick="trocarAba('matriz')" class="tab-button flex items-center justify-center gap-1.5 py-2 px-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition-all">
           <i class="fa-solid fa-check-to-slot text-xs sm:text-sm"></i>
-          <span>3. Matriz & Fontes</span>
+          <span>4. Matriz & Fontes</span>
         </button>
       </div>
     </div>
@@ -564,6 +568,528 @@
       <button type="button" onclick="trocarAba('veredito')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2">
         <i class="fa-solid fa-arrow-left"></i> Voltar ao Meu Veredito
       </button>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" onclick="trocarAba('memorial')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-calculator"></i> Ver Memorial de Cálculo ➡️
+        </button>
+        <button type="button" onclick="copiarResumo()" class="bg-slate-700 hover:bg-slate-800 text-white font-bold px-3 py-2.5 rounded-lg transition flex items-center gap-2 shadow-sm">
+          <i class="fa-solid fa-copy"></i> Copiar
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ======================================================================= -->
+  <!-- ABA 3: MEMORIAL DE CÁLCULO DETALHADO (AUDITORIA PASSO A PASSO)          -->
+  <!-- ======================================================================= -->
+  <main id="tab-content-memorial" class="hidden max-w-4xl mx-auto px-3 sm:px-4 mt-4 space-y-6">
+    
+    <!-- Cabeçalho do Memorial de Cálculo -->
+    <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-calculator"></i> Auditoria Contábil Passo a Passo
+          </div>
+          <h2 class="text-lg sm:text-2xl font-black text-slate-900">Memorial de Cálculo para Conferência</h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
+            Fórmulas, bases legais, alíquotas oficiais e verificação transparente da trava de 9% do Saúde CAIXA.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl transition text-xs flex items-center gap-1.5">
+            <i class="fa-solid fa-print"></i> Imprimir / PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Selo de Verificação de Integridade -->
+      <div class="mt-4 pt-1 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-shield-halved text-blue-600 text-xl flex-shrink-0"></i>
+          <div>
+            <span class="text-xs font-bold text-slate-800 block">Auditoria Matemática de Folha</span>
+            <span class="text-[11px] text-slate-500">Remuneração Bruta - Soma de Todos os Descontos = Salário Líquido no Bolso</span>
+          </div>
+        </div>
+        <div id="memAuditoriaStatus">
+          <span class="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full text-xs font-black">
+            <i class="fa-solid fa-circle-check"></i> Auditoria 100% Precisa: Diferença de R$ 0,00
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. BLOCO: REMUNERAÇÃO E REAJUSTE SALARIAL -->
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 inline-flex items-center justify-center text-xs font-black">1</span>
+          Remuneração Base & Reajuste do ACT (+4,60%)
+        </h3>
+        <span class="text-[11px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">Proposta 16/09/2026</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left">
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-2 text-slate-600 font-medium">Salário Base Atual (Remuneração Anterior)</td>
+              <td id="memSalHoje" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
+              <td class="py-2 text-right text-slate-400 pl-3">Valor de referência informado</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-600 font-medium">Reposição da Inflação (100% do INPC acumulado)</td>
+              <td id="memInpcPct" class="py-2 text-right font-bold text-slate-700">4,00%</td>
+              <td class="py-2 text-right text-slate-400 pl-3">Cláusula 1ª da Proposta do ACT</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-600 font-medium">Aumento Real Acordado em Mesa</td>
+              <td id="memRealPct" class="py-2 text-right font-bold text-slate-700">0,60%</td>
+              <td class="py-2 text-right text-slate-400 pl-3">Ganho real acima da inflação</td>
+            </tr>
+            <tr class="bg-blue-50/50 font-bold">
+              <td class="py-2.5 px-2 text-blue-950">Reajuste Salarial Total Aplicado</td>
+              <td id="memReajusteTotalPct" class="py-2.5 text-right font-black text-blue-900">+4,60%</td>
+              <td class="py-2.5 text-right text-blue-700 pl-3">INPC (4,00%) + Ganho Real (0,60%)</td>
+            </tr>
+            <tr class="bg-slate-100 font-black text-slate-900">
+              <td class="py-2.5 px-2">Nova Remuneração Base (Salário Novo de Cálculo)</td>
+              <td id="memSalNovo" class="py-2.5 text-right font-black text-blue-800 text-sm">R$ 0,00</td>
+              <td class="py-2.5 text-right text-slate-500 pl-3">Base de cálculo para INSS, FUNCEF e Saúde</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. BLOCO: INSS PROGRESSIVO (PORTARIA OFICIAL 2026) -->
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 inline-flex items-center justify-center text-xs font-black">2</span>
+          Previdência Social (INSS Progressivo Oficial)
+        </h3>
+        <span class="text-[11px] bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded">Portaria Interministerial 2026</span>
+      </div>
+      <p class="text-xs text-slate-500">
+        O INSS é calculado de forma progressiva e fatiada por faixas de renda sobre a remuneração bruta:
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left">
+          <thead class="bg-slate-50 text-slate-600 font-bold">
+            <tr>
+              <th class="p-2 rounded-l">Faixa Salarial Oficial</th>
+              <th class="p-2 text-center">Alíquota</th>
+              <th class="p-2 text-right">Base Fatiada</th>
+              <th class="p-2 text-right rounded-r">Desconto na Faixa</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-2 px-2 text-slate-700 font-medium">1ª Faixa (até R$ 1.621,00)</td>
+              <td class="py-2 text-center font-bold text-slate-600">7,5%</td>
+              <td id="memInssB1" class="py-2 text-right text-slate-600">R$ 0,00</td>
+              <td id="memInssV1" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-2 text-slate-700 font-medium">2ª Faixa (de R$ 1.621,01 a R$ 2.902,84)</td>
+              <td class="py-2 text-center font-bold text-slate-600">9,0%</td>
+              <td id="memInssB2" class="py-2 text-right text-slate-600">R$ 0,00</td>
+              <td id="memInssV2" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-2 text-slate-700 font-medium">3ª Faixa (de R$ 2.902,85 a R$ 4.354,27)</td>
+              <td class="py-2 text-center font-bold text-slate-600">12,0%</td>
+              <td id="memInssB3" class="py-2 text-right text-slate-600">R$ 0,00</td>
+              <td id="memInssV3" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-2 text-slate-700 font-medium">4ª Faixa (de R$ 4.354,28 até teto R$ 8.475,55)</td>
+              <td class="py-2 text-center font-bold text-slate-600">14,0%</td>
+              <td id="memInssB4" class="py-2 text-right text-slate-600">R$ 0,00</td>
+              <td id="memInssV4" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
+            </tr>
+            <tr class="bg-slate-100 font-black">
+              <td colspan="3" class="py-2.5 px-2 text-slate-900">
+                TOTAL DE INSS RETIDO EM FOLHA
+                <span id="memInssStatus" class="block text-[10px] text-slate-500 font-normal">Calculando...</span>
+              </td>
+              <td id="memInssTotal" class="py-2.5 px-2 text-right text-sm text-slate-900">R$ 0,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. BLOCO: FUNCEF & LIMITE DE 12% DO IRRF -->
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 inline-flex items-center justify-center text-xs font-black">3</span>
+          Previdência Complementar (FUNCEF) & Teto de Dedução Legal
+        </h3>
+        <span class="text-[11px] bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded">Lei nº 9.532/1997 art. 11</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left">
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-2 text-slate-600 font-medium">Remuneração Base de Incidência</td>
+              <td id="memFuncefSal" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
+              <td class="py-2 text-right text-slate-400 pl-3">Salário com reajuste</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-600 font-medium">Alíquota Contributiva Selecionada</td>
+              <td id="memFuncefPct" class="py-2 text-right font-bold text-blue-700">8,0%</td>
+              <td class="py-2 text-right text-slate-400 pl-3">Taxa pessoal informada</td>
+            </tr>
+            <tr class="bg-slate-50 font-bold">
+              <td class="py-2.5 px-2 text-slate-900">Contribuição FUNCEF Mensal em Folha</td>
+              <td id="memFuncefTotal" class="py-2.5 text-right font-black text-slate-900 text-sm">R$ 0,00</td>
+              <td class="py-2.5 text-right text-slate-500 pl-3">Desconto direto no contracheque</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-600 font-medium">Teto Legal de Dedução Tributária no IRRF (12% da RB)</td>
+              <td id="memFuncefTeto12" class="py-2 text-right font-bold text-slate-700">R$ 0,00</td>
+              <td class="py-2 text-right text-slate-400 pl-3">Limite legal art. 11 Lei 9.532/97</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-600 font-medium">Parcela Dedutível na Base do IRRF</td>
+              <td id="memFuncefDedutivel" class="py-2 text-right font-bold text-emerald-700">R$ 0,00</td>
+              <td class="py-2 text-right text-slate-400 pl-3">Min(FUNCEF, Teto de 12%)</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-600 font-medium">Parcela Não Dedutível (se alíquota > 12%)</td>
+              <td id="memFuncefNaoDedutivel" class="py-2 text-right font-bold text-slate-500">R$ 0,00</td>
+              <td class="py-2 text-right text-slate-400 pl-3">Sem abatimento na fonte</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="memFuncefStatus" class="p-2.5 rounded-lg bg-slate-50 text-xs text-slate-700 border border-slate-200">
+        Calculando...
+      </div>
+    </div>
+
+    <!-- 4. BLOCO: SAÚDE CAIXA E AUDITORIA DA TRAVA DE 9% -->
+    <div class="bg-white rounded-2xl p-5 border-2 border-blue-200 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <h3 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-blue-600 text-white inline-flex items-center justify-center text-xs font-black">4</span>
+            Saúde CAIXA: Auditoria Estrita da Trava do Teto de 9,0%
+          </h3>
+          <p class="text-[11px] text-blue-700 font-semibold mt-0.5">
+            Demonstração técnica da aplicação do teto estatutário do grupo familiar direto
+          </p>
+        </div>
+        <div id="memSaudeTravaStatusBadge">
+          <span class="bg-slate-100 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-full uppercase">
+            Avaliando teto...
+          </span>
+        </div>
+      </div>
+
+      <!-- Tabela do Grupo Familiar Direto -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left">
+          <thead class="bg-blue-50/60 text-blue-900 font-bold">
+            <tr>
+              <th class="p-2.5 rounded-l">Componente do Grupo Familiar Direto</th>
+              <th class="p-2.5 text-center">Regra da Proposta</th>
+              <th class="p-2.5 text-right rounded-r">Custo Bruto Calculado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-2.5 px-2 text-slate-800 font-medium">Titular (Ativo ou Aposentado)</td>
+              <td id="memSaudeTitularSal" class="py-2.5 text-center text-slate-600 font-mono">RB × 3,7%</td>
+              <td id="memSaudeTitularVal" class="py-2.5 text-right font-bold text-slate-900">R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 px-2 text-slate-800 font-medium">
+                Dependentes Diretos no Plano
+                <span class="block text-[10px] text-slate-400">Cônjuge e filhos menores de 21 anos (sujeitos ao teto de 9%)</span>
+              </td>
+              <td id="memSaudeDepDiretoQtd" class="py-2.5 text-center text-slate-600 font-mono">0 vida(s) × R$ 560</td>
+              <td id="memSaudeDepDiretoVal" class="py-2.5 text-right font-bold text-slate-900">R$ 0,00</td>
+            </tr>
+            <tr class="bg-slate-50 font-bold">
+              <td colspan="2" class="py-2.5 px-2 text-slate-700">
+                SOMA BRUTA DO GRUPO FAMILIAR DIRETO (sem trava)
+              </td>
+              <td id="memSaudeCustoBaseDiretos" class="py-2.5 text-right text-slate-900 font-black text-sm">R$ 0,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Painel de Confronto com a Trava do Teto de 9% -->
+      <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
+          <span class="text-xs font-black uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-lock text-blue-600"></i> Trava Estatutária do Grupo Familiar (9,0% da RB)
+          </span>
+          <span id="memSaudeTeto9Pct" class="text-xs font-bold text-blue-800">9,0% da RB</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+          <div class="bg-white p-3 rounded-lg border border-slate-200">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Teto Máximo de 9,0%</span>
+            <p id="memSaudeTeto9Val" class="text-base font-black text-blue-900 mt-0.5">R$ 0,00</p>
+            <span class="text-[10px] text-slate-500">Limite inegociável da RB</span>
+          </div>
+          <div class="bg-white p-3 rounded-lg border border-slate-200">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Cobrança Diretos Efetiva</span>
+            <p id="memSaudeCobradoDiretos" class="text-base font-black text-slate-900 mt-0.5">R$ 0,00</p>
+            <span class="text-[10px] text-slate-500">Com trava estrita aplicada</span>
+          </div>
+          <div class="bg-white p-3 rounded-lg border border-slate-200">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Proteção da Trava</span>
+            <p id="memSaudeEconomiaTrava" class="text-base font-black text-emerald-700 mt-0.5">R$ 0,00</p>
+            <span class="text-[10px] text-slate-500">Economia em relação ao bruto</span>
+          </div>
+        </div>
+
+        <div id="memSaudeTravaDesc" class="text-xs text-slate-600 leading-relaxed bg-white/70 p-3 rounded-lg border border-slate-200">
+          Calculando...
+        </div>
+        
+        <p class="text-[10px] text-slate-400 italic">
+          * Nota de Auditoria: Conforme cláusula do ACT, o teto de 9% é uma trava limite máxima e rígida. Dependentes excedentes NÃO geram cobrança adicional de R$ 50 sobre o teto de 9%.
+        </p>
+      </div>
+
+      <!-- Dependentes Fora do Teto e Totais do Plano -->
+      <div class="border-t border-slate-100 pt-3 space-y-2">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600">Dependentes Fora do Teto Familiar (Cobrança Específica)</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <tbody class="divide-y divide-slate-100">
+              <tr>
+                <td class="py-2 text-slate-700 font-medium">Filhos de 21 a 24 anos (Dependentes Indiretos)</td>
+                <td id="memSaudeDepIndiretoQtd" class="py-2 text-center text-slate-500 font-mono">0 vida(s) × R$ 660</td>
+                <td id="memSaudeDepIndiretoVal" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
+              </tr>
+              <tr>
+                <td class="py-2 text-slate-700 font-medium">Dependentes Especiais (filhos 24-27 anos, pais e judiciais)</td>
+                <td id="memSaudeDepEspecialQtd" class="py-2 text-center text-slate-500 font-mono">0 vida(s) × R$ 900</td>
+                <td id="memSaudeDepEspecialVal" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
+              </tr>
+              <tr class="bg-blue-50/70 font-black text-blue-950">
+                <td colspan="2" class="py-2.5 px-2 text-sm">TOTAL SAÚDE CAIXA MENSAL EM FOLHA</td>
+                <td id="memSaudeTotalMensal" class="py-2.5 px-2 text-right text-base font-black text-blue-900">R$ 0,00</td>
+              </tr>
+              <tr class="bg-slate-100 font-bold text-slate-800">
+                <td colspan="2" class="py-2 px-2 text-xs">CUSTO TOTAL ANUAL SAÚDE CAIXA (13 mensalidades oficiais)</td>
+                <td id="memSaudeTotalAnual" class="py-2 px-2 text-right font-black text-slate-900">R$ 0,00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. BLOCO: IRRF OFICIAL (LEGAL VS. SIMPLIFICADO) -->
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <h3 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 inline-flex items-center justify-center text-xs font-black">5</span>
+            Imposto de Renda Retido na Fonte (IRRF Oficial)
+          </h3>
+          <p class="text-[11px] text-slate-500">
+            Comparativo oficial auditado: Deduções Legais vs. Desconto Simplificado (R$ 607,20 - Lei nº 15.191/2025)
+          </p>
+        </div>
+        <div id="memIrrfRegimeBadge">
+          <span class="bg-slate-100 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-md uppercase">
+            Avaliando regime...
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Coluna: Deduções Legais -->
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2 text-xs">
+          <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+            <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px]">Opção A: Deduções Legais</span>
+            <span class="text-[10px] text-slate-400">Lei nº 9.250/95</span>
+          </div>
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between text-slate-600">
+              <span>Remuneração Bruta:</span>
+              <span id="memIrrfBaseLegalSal" class="font-bold text-slate-800">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>(-) INSS Retido:</span>
+              <span id="memIrrfBaseLegalInss" class="font-medium text-slate-700">- R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>(-) FUNCEF Dedutível (teto 12%):</span>
+              <span id="memIrrfBaseLegalFuncef" class="font-medium text-slate-700">- R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>(-) Dedução Dependentes:</span>
+              <span id="memIrrfBaseLegalDeps" class="font-medium text-slate-700">- R$ 0,00</span>
+            </div>
+            <div class="flex justify-between border-t border-slate-200 pt-1.5 font-bold text-slate-800">
+              <span>(=) Base Legal do IRRF:</span>
+              <span id="memIrrfBaseLegal" class="font-black text-blue-900">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-slate-500 pt-1 text-[11px]">
+              <span>Imposto Tabela Progressiva:</span>
+              <span id="memIrrfLegalBruto" class="font-medium text-slate-700">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-slate-500 text-[11px]">
+              <span>(-) Redutor Lei 15.270/2025:</span>
+              <span id="memIrrfLegalRedutor" class="font-medium text-emerald-700">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between border-t border-slate-200 pt-2 font-black text-slate-900 text-sm">
+              <span>IRRF LEGAL CALCULADO:</span>
+              <span id="memIrrfLegalFinal" class="font-black text-blue-900">R$ 0,00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna: Desconto Simplificado -->
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2 text-xs">
+          <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+            <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px]">Opção B: Desconto Simplificado</span>
+            <span class="text-[10px] text-slate-400">Lei nº 15.191/2025</span>
+          </div>
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between text-slate-600">
+              <span>Remuneração Bruta:</span>
+              <span id="memIrrfBaseSimpSal" class="font-bold text-slate-800">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>(-) Desconto Simplificado Padrão:</span>
+              <span id="memIrrfBaseSimpDesc" class="font-medium text-slate-700">- R$ 607,20</span>
+            </div>
+            <div class="flex justify-between border-t border-slate-200 pt-1.5 font-bold text-slate-800">
+              <span>(=) Base Simplificada:</span>
+              <span id="memIrrfBaseSimp" class="font-black text-blue-900">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-slate-500 pt-1 text-[11px]">
+              <span>Imposto Tabela Progressiva:</span>
+              <span id="memIrrfSimpBruto" class="font-medium text-slate-700">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-slate-500 text-[11px]">
+              <span>(-) Redutor Lei 15.270/2025:</span>
+              <span id="memIrrfSimpRedutor" class="font-medium text-emerald-700">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between border-t border-slate-200 pt-2 font-black text-slate-900 text-sm">
+              <span>IRRF SIMPLIFICADO:</span>
+              <span id="memIrrfSimpFinal" class="font-black text-blue-900">R$ 0,00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-50/70 p-3 rounded-xl border border-blue-100 flex justify-between items-center text-xs">
+        <div>
+          <span class="font-bold text-blue-950 block">Desconto Oficial do IRRF Efetivado na Folha</span>
+          <span class="text-[10px] text-blue-700">A CAIXA aplica automaticamente a opção mais econômica para o trabalhador</span>
+        </div>
+        <span id="memIrrfValorFinal" class="text-base font-black text-blue-900">R$ 0,00</span>
+      </div>
+    </div>
+
+    <!-- 6. BLOCO: FECHAMENTO CONTÁBIL E AUDITORIA MATEMÁTICA -->
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 inline-flex items-center justify-center text-xs font-black">6</span>
+          Fechamento Contábil do Salário Líquido no Bolso
+        </h3>
+        <span class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Balanço Auditado</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left">
+          <tbody class="divide-y divide-slate-100">
+            <tr class="bg-slate-50 font-bold">
+              <td class="py-2.5 px-3 text-slate-900">(+) REMUNERAÇÃO BRUTA REAJUSTADA</td>
+              <td id="memFechamentoBruto" class="py-2.5 px-3 text-right font-black text-slate-900 text-sm">R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 text-slate-600 font-medium">(-) Previdência Oficial (INSS Progressivo)</td>
+              <td id="memFechamentoInss" class="py-2 px-3 text-right font-medium text-slate-700">- R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 text-slate-600 font-medium">(-) Previdência Complementar (FUNCEF)</td>
+              <td id="memFechamentoFuncef" class="py-2 px-3 text-right font-medium text-slate-700">- R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 text-slate-600 font-medium">(-) Saúde CAIXA (Titular com trava 9% + Dependentes)</td>
+              <td id="memFechamentoSaude" class="py-2 px-3 text-right font-medium text-slate-700">- R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 text-slate-600 font-medium">(-) Imposto de Renda Retido na Fonte (IRRF)</td>
+              <td id="memFechamentoIrrf" class="py-2 px-3 text-right font-medium text-slate-700">- R$ 0,00</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 text-slate-600 font-medium">(-) Outros Descontos Cadastrados</td>
+              <td id="memFechamentoOutros" class="py-2 px-3 text-right font-medium text-slate-700">- R$ 0,00</td>
+            </tr>
+            <tr class="bg-rose-50/50 font-bold">
+              <td class="py-2.5 px-3 text-rose-900">(=) SOMA TOTAL DOS DESCONTOS EM FOLHA</td>
+              <td id="memFechamentoTotalDescontos" class="py-2.5 px-3 text-right font-black text-rose-700 text-sm">R$ 0,00</td>
+            </tr>
+            <tr class="bg-gradient-to-r from-emerald-50 to-blue-50 font-black border-t-2 border-emerald-400 text-sm">
+              <td class="py-3 px-3 text-emerald-950 flex items-center gap-1.5">
+                <i class="fa-solid fa-wallet text-emerald-600 text-base"></i> (=) SALÁRIO LÍQUIDO DISPONÍVEL NO BOLSO
+              </td>
+              <td id="memFechamentoLiquido" class="py-3 px-3 text-right text-base font-black text-emerald-800">R$ 0,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 7. BLOCO: CONSOLIDAÇÃO ANUAL E TOMADA DE DECISÃO -->
+    <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-5 shadow-sm space-y-4">
+      <div class="flex items-center justify-between border-b border-blue-800 pb-3">
+        <div>
+          <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-scale-balanced text-amber-400"></i>
+            Equação do Balanço Anual Consolidado (12 Meses)
+          </h3>
+          <p class="text-[11px] text-blue-200">
+            Variação Salarial Líquida Anual (13,33 folhas líquidas) confrontada com as 13 mensalidades do Saúde CAIXA
+          </p>
+        </div>
+        <span class="text-[10px] bg-blue-800 text-amber-300 font-black px-2 py-0.5 rounded uppercase tracking-wider">Fechamento</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+        <div class="bg-white/5 p-3.5 rounded-xl border border-white/10">
+          <span class="text-[10px] uppercase font-bold text-slate-300 block">Ganho Líquido Salarial Anual</span>
+          <p id="memBalancoFolhasLiq" class="text-base font-black text-emerald-400 mt-1">R$ 0,00</p>
+          <span class="text-[10px] text-slate-400">13,33 remunerações líquidas</span>
+        </div>
+        <div class="bg-white/5 p-3.5 rounded-xl border border-white/10">
+          <span class="text-[10px] uppercase font-bold text-slate-300 block">Custo Adicional Saúde CAIXA</span>
+          <p id="memBalancoSaude13" class="text-base font-black text-rose-400 mt-1">R$ 0,00</p>
+          <span class="text-[10px] text-slate-400">13 mensalidades oficiais</span>
+        </div>
+        <div class="bg-white/10 p-3.5 rounded-xl border border-amber-400/30">
+          <span class="text-[10px] uppercase font-bold text-amber-300 block">Saldo Anual no Patrimônio</span>
+          <p id="memBalancoSaldoFinal" class="text-lg font-black text-white mt-1">R$ 0,00</p>
+          <span class="text-[10px] text-slate-300">Resultado final no bolso ao ano</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de Ações do Memorial -->
+    <div class="bg-white rounded-xl p-4 border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+      <button type="button" onclick="trocarAba('contracheque')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> Voltar ao Contracheque
+      </button>
       <div class="flex gap-2">
         <button type="button" onclick="copiarResumo()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2 shadow-sm">
           <i class="fa-solid fa-copy"></i> Copiar Demonstrativo
@@ -576,7 +1102,7 @@
   </main>
 
   <!-- ======================================================================= -->
-  <!-- ABA 3: MATRIZ DE DECISÃO & FONTES AUDITADAS                              -->
+  <!-- ABA 4: MATRIZ DE DECISÃO & FONTES AUDITADAS                              -->
   <!-- ======================================================================= -->
   <main id="tab-content-matriz" class="hidden max-w-4xl mx-auto px-3 sm:px-4 mt-4 space-y-6">
     

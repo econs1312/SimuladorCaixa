@@ -191,18 +191,12 @@ function recalcular() {
     // Abaixo do teto, com garantia de piso de R$ 50 por vida
     subtotalDiretosNovo = Math.max(custoBaseDiretosNovo, (1 + depDiretos) * 50);
   } else {
+    // TRAVA ESTRITA NO TETO DE 9,0% DA REMUNERAÇÃO BASE (ACT CAIXA 2026):
+    // Titular + dependentes diretos são rigidamente limitados ao teto de 9,0% da RB.
+    // Conforme pactuado, dependentes excedentes NÃO geram acréscimo de R$ 50 além do teto.
     bateuTetoNovo = true;
-    const margemDep = Math.max(0, tetoNovo - titularNovo);
-    // Quantos dependentes diretos cabem inteiramente na margem até o teto de 9%
-    const depsAteTeto = Math.min(depDiretos, Math.floor(margemDep / 560));
-    // Dependentes que não couberam inteiramente pagam o piso de R$ 50
-    depsExcedentesNovo = Math.max(0, depDiretos - depsAteTeto);
-    
-    // Custo no teto de 9% + R$ 50 por dependente excedente
-    const custoComTeto = tetoNovo + (depsExcedentesNovo * 50);
-    // A trava nunca pode cobrar mais do que o custo original sem teto
-    subtotalDiretosNovo = Math.min(custoBaseDiretosNovo, custoComTeto);
-    reducaoTetoNovo = Math.max(0, custoBaseDiretosNovo - subtotalDiretosNovo);
+    subtotalDiretosNovo = tetoNovo;
+    reducaoTetoNovo = Math.max(0, custoBaseDiretosNovo - tetoNovo);
   }
 
   const depForaNovo = (depIndiretos * 660) + (depEspeciais * 900);
@@ -314,11 +308,7 @@ function recalcular() {
   if (depDiretos === 0) {
     travaMsg = 'Titular (Hoje: 3,5% • Novo: 3,7%) sem dependentes diretos';
   } else if (bateuTetoNovo) {
-    if (depsExcedentesNovo > 0) {
-      travaMsg = `Limitado ao teto de 9,0% (${fmtMoeda(tetoNovo)}) + ${depsExcedentesNovo} excedente(s) a R$ 50 cada (Sem teto seria ${fmtMoeda(custoBaseDiretosNovo)} • Economia do teto: ${fmtMoeda(reducaoTetoNovo)})`;
-    } else {
-      travaMsg = `Limitado à trava do teto de 9,0% (Sem teto seria ${fmtMoeda(custoBaseDiretosNovo)} • Economia do teto: ${fmtMoeda(reducaoTetoNovo)})`;
-    }
+    travaMsg = `Limitado rigorosamente à trava do teto de 9,0% (${fmtMoeda(tetoNovo)}) • Economia do teto: ${fmtMoeda(reducaoTetoNovo)} (Sem a trava seria ${fmtMoeda(custoBaseDiretosNovo)})`;
   } else {
     if (reducaoTetoHoje > 0) {
       travaMsg = `Hoje limitado a 7% (${fmtMoeda(tetoHoje)}). No novo modelo, dentro do teto de 9% (${fmtMoeda(tetoNovo)}).`;
@@ -355,6 +345,40 @@ function recalcular() {
 
   // Diagnóstico com Regra Estrita de Ganho Real
   aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxaReal, salarioNovo, liquidoHoje, liquidoNovo);
+
+  // Atualização do Memorial de Cálculo Detalhado
+  atualizarMemorialCalculo({
+    salarioBase,
+    inpc,
+    taxaReal,
+    reajusteTotal,
+    salarioNovo,
+    aliquotaFuncef,
+    funcefNovo,
+    outrosDesc,
+    depDiretos,
+    depIndiretos,
+    depEspeciais,
+    depIndiretosUniv,
+    depsParaIrrf,
+    inssNovo,
+    titularNovo,
+    depDiretoNovo,
+    custoBaseDiretosNovo,
+    tetoNovo,
+    bateuTetoNovo,
+    subtotalDiretosNovo,
+    reducaoTetoNovo,
+    depForaNovo,
+    totalSaudeNovo,
+    irrfInfoNovo,
+    irrfNovo,
+    totalDescontosNovo,
+    liquidoNovo,
+    ganhoSalarialLiqAnual,
+    difSaudeAnual,
+    saldoAnualTotal
+  });
 }
 
 function atualizarTermometroEResumo(saldoAnualTotal, ganhoSalarialLiqAnual, difSaudeAnual, difLiquido, salarioBase, salarioNovo, totalSaudeHoje, totalSaudeNovo, liquidoHoje, liquidoNovo) {
@@ -608,7 +632,7 @@ function compartilharWhatsApp() {
 
 // Controle e Navegação das Abas Mobile-First
 function trocarAba(abaId) {
-  const abas = ['veredito', 'contracheque', 'matriz'];
+  const abas = ['veredito', 'contracheque', 'memorial', 'matriz'];
   if (!abas.includes(abaId)) abaId = 'veredito';
 
   abas.forEach(id => {
@@ -646,7 +670,7 @@ function trocarAba(abaId) {
 
 window.onload = function() {
   const hash = (window.location.hash || '').replace('#', '');
-  if (hash === 'contracheque' || hash === 'matriz' || hash === 'fontes') {
+  if (hash === 'contracheque' || hash === 'memorial' || hash === 'matriz' || hash === 'fontes') {
     if (hash === 'fontes') {
       trocarAba('matriz');
       setTimeout(() => {
@@ -662,3 +686,208 @@ window.onload = function() {
 
   recalcular();
 };
+
+// =============================================================================
+// MEMORIAL DE CÁLCULO DETALHADO (AUDITORIA PASSO A PASSO)
+// =============================================================================
+function detalharInss(salario) {
+  const f1 = 1621.00;
+  const f2 = 2902.84;
+  const f3 = 4354.27;
+  const tetoRgps = 8475.55;
+
+  const b1 = Math.max(0, Math.min(salario, f1));
+  const v1 = b1 * 0.075;
+
+  const b2 = Math.max(0, Math.min(salario, f2) - f1);
+  const v2 = b2 * 0.09;
+
+  const b3 = Math.max(0, Math.min(salario, f3) - f2);
+  const v3 = b3 * 0.12;
+
+  const b4 = Math.max(0, Math.min(salario, tetoRgps) - f3);
+  const v4 = b4 * 0.14;
+
+  const total = Math.round((v1 + v2 + v3 + v4) * 100) / 100;
+  const bateuTeto = salario >= tetoRgps;
+
+  return { b1, v1, b2, v2, b3, v3, b4, v4, total, bateuTeto, tetoRgps };
+}
+
+function detalharIrrfCompleto(salario, inss, funcef, numDepsIrrf) {
+  const tetoFuncef12 = salario * 0.12;
+  const funcefDedutivel = Math.min(funcef, tetoFuncef12);
+  const funcefNaoDedutivel = Math.max(0, funcef - tetoFuncef12);
+  const deducaoDeps = numDepsIrrf * 189.59;
+
+  // Regime Legal
+  const baseLegal = Math.max(0, salario - inss - funcefDedutivel - deducaoDeps);
+  const irrfLegalBruto = Math.max(0, calcularFaixasIrrf(baseLegal));
+  let redutorLegal = 0;
+  if (baseLegal <= 5000.00) {
+    redutorLegal = Math.min(312.89, irrfLegalBruto);
+  } else if (baseLegal <= 7350.00) {
+    redutorLegal = Math.max(0, 978.62 - (0.133145 * baseLegal));
+    redutorLegal = Math.min(redutorLegal, irrfLegalBruto);
+  }
+  const irrfLegalFinal = Math.max(0, irrfLegalBruto - redutorLegal);
+
+  // Regime Simplificado (R$ 607,20)
+  const baseSimplificada = Math.max(0, salario - 607.20);
+  const irrfSimplificadoBruto = Math.max(0, calcularFaixasIrrf(baseSimplificada));
+  let redutorSimplificado = 0;
+  if (baseSimplificada <= 5000.00) {
+    redutorSimplificado = Math.min(312.89, irrfSimplificadoBruto);
+  } else if (baseSimplificada <= 7350.00) {
+    redutorSimplificado = Math.max(0, 978.62 - (0.133145 * baseSimplificada));
+    redutorSimplificado = Math.min(redutorSimplificado, irrfSimplificadoBruto);
+  }
+  const irrfSimplificadoFinal = Math.max(0, irrfSimplificadoBruto - redutorSimplificado);
+
+  const regimeEscolhido = irrfSimplificadoFinal < irrfLegalFinal ? 'simplificado' : 'legal';
+  const irrfFinal = regimeEscolhido === 'simplificado' ? irrfSimplificadoFinal : irrfLegalFinal;
+
+  return {
+    tetoFuncef12,
+    funcefDedutivel,
+    funcefNaoDedutivel,
+    deducaoDeps,
+    baseLegal,
+    irrfLegalBruto,
+    redutorLegal,
+    irrfLegalFinal: Math.round(irrfLegalFinal * 100) / 100,
+    baseSimplificada,
+    irrfSimplificadoBruto,
+    redutorSimplificado,
+    irrfSimplificadoFinal: Math.round(irrfSimplificadoFinal * 100) / 100,
+    regimeEscolhido,
+    irrfFinal: Math.round(irrfFinal * 100) / 100
+  };
+}
+
+function atualizarMemorialCalculo(dados) {
+  const setTxt = (id, txt) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = txt;
+  };
+  const setHtml = (id, html) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  };
+
+  // 1. Remuneração e Reajuste
+  setTxt('memSalHoje', fmtMoeda(dados.salarioBase));
+  setTxt('memInpcPct', `${(dados.inpc * 100).toFixed(2)}%`);
+  setTxt('memRealPct', `${(dados.taxaReal * 100).toFixed(2)}%`);
+  setTxt('memReajusteTotalPct', `+${(dados.reajusteTotal * 100).toFixed(2)}%`);
+  setTxt('memSalNovo', fmtMoeda(dados.salarioNovo));
+
+  // 2. INSS Progressivo
+  const inssInfo = detalharInss(dados.salarioNovo);
+  setTxt('memInssB1', fmtMoeda(inssInfo.b1));
+  setTxt('memInssV1', fmtMoeda(inssInfo.v1));
+  setTxt('memInssB2', fmtMoeda(inssInfo.b2));
+  setTxt('memInssV2', fmtMoeda(inssInfo.v2));
+  setTxt('memInssB3', fmtMoeda(inssInfo.b3));
+  setTxt('memInssV3', fmtMoeda(inssInfo.v3));
+  setTxt('memInssB4', fmtMoeda(inssInfo.b4));
+  setTxt('memInssV4', fmtMoeda(inssInfo.v4));
+  setTxt('memInssTotal', fmtMoeda(inssInfo.total));
+  setTxt('memInssStatus', inssInfo.bateuTeto 
+    ? `Limitado ao Teto do RGPS de R$ 8.475,55 (desconto máximo oficial de ${fmtMoeda(inssInfo.total)})` 
+    : `Base integral dentro das faixas progressivas`);
+
+  // 3. FUNCEF & Trava de 12%
+  setTxt('memFuncefSal', fmtMoeda(dados.salarioNovo));
+  setTxt('memFuncefPct', `${(dados.aliquotaFuncef * 100).toFixed(1)}%`);
+  setTxt('memFuncefTotal', fmtMoeda(dados.funcefNovo));
+  const tetoFuncef = dados.salarioNovo * 0.12;
+  const funcefDed = Math.min(dados.funcefNovo, tetoFuncef);
+  const funcefNaoDed = Math.max(0, dados.funcefNovo - tetoFuncef);
+  setTxt('memFuncefTeto12', fmtMoeda(tetoFuncef));
+  setTxt('memFuncefDedutivel', fmtMoeda(funcefDed));
+  setTxt('memFuncefNaoDedutivel', fmtMoeda(funcefNaoDed));
+  if (dados.aliquotaFuncef > 0.12) {
+    setHtml('memFuncefStatus', `<span class="text-amber-700 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Alíquota acima de 12%: a parcela de ${fmtMoeda(funcefNaoDed)} não gera dedução tributária (Art. 11 Lei 9.532/97).</span>`);
+  } else {
+    setHtml('memFuncefStatus', `<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>100% da contribuição é dedutível na base de cálculo do IRRF (dentro do teto legal de 12%).</span>`);
+  }
+
+  // 4. Saúde CAIXA (Auditoria Estrita da Trava de 9%)
+  setTxt('memSaudeTitularSal', `${fmtMoeda(dados.salarioNovo)} × 3,7%`);
+  setTxt('memSaudeTitularVal', fmtMoeda(dados.titularNovo));
+  setTxt('memSaudeDepDiretoQtd', `${dados.depDiretos} vida(s) × R$ 560,00`);
+  setTxt('memSaudeDepDiretoVal', fmtMoeda(dados.depDiretoNovo));
+  setTxt('memSaudeCustoBaseDiretos', fmtMoeda(dados.custoBaseDiretosNovo));
+  setTxt('memSaudeTeto9Pct', `9,0% de ${fmtMoeda(dados.salarioNovo)}`);
+  setTxt('memSaudeTeto9Val', fmtMoeda(dados.tetoNovo));
+
+  if (dados.bateuTetoNovo) {
+    setHtml('memSaudeTravaStatusBadge', `<span class="bg-rose-100 text-rose-800 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-lock mr-1"></i>Trava de 9,0% Ativada</span>`);
+    setHtml('memSaudeTravaDesc', `O custo bruto familiar (<strong>${fmtMoeda(dados.custoBaseDiretosNovo)}</strong>) superou o teto de 9%. O desconto de titular e diretos é <strong>rigidamente limitado a ${fmtMoeda(dados.tetoNovo)}</strong>. Dependentes diretos excedentes não geram custos adicionais sobre o teto.`);
+    setTxt('memSaudeCobradoDiretos', fmtMoeda(dados.subtotalDiretosNovo));
+    setTxt('memSaudeEconomiaTrava', `Economia de ${fmtMoeda(dados.reducaoTetoNovo)}/mês`);
+  } else {
+    setHtml('memSaudeTravaStatusBadge', `<span class="bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-circle-check mr-1"></i>Dentro do Teto</span>`);
+    setHtml('memSaudeTravaDesc', `O custo do grupo familiar direto (<strong>${fmtMoeda(dados.custoBaseDiretosNovo)}</strong>) está abaixo do teto de 9,0% (<strong>${fmtMoeda(dados.tetoNovo)}</strong>). Cobrança realizada pelo valor integral.`);
+    setTxt('memSaudeCobradoDiretos', fmtMoeda(dados.subtotalDiretosNovo));
+    setTxt('memSaudeEconomiaTrava', 'Dentro da margem');
+  }
+
+  const depIndiretosVal = dados.depIndiretos * 660;
+  const depEspeciaisVal = dados.depEspeciais * 900;
+  setTxt('memSaudeDepIndiretoQtd', `${dados.depIndiretos} vida(s) × R$ 660,00`);
+  setTxt('memSaudeDepIndiretoVal', fmtMoeda(depIndiretosVal));
+  setTxt('memSaudeDepEspecialQtd', `${dados.depEspeciais} vida(s) × R$ 900,00`);
+  setTxt('memSaudeDepEspecialVal', fmtMoeda(depEspeciaisVal));
+  setTxt('memSaudeTotalMensal', fmtMoeda(dados.totalSaudeNovo));
+  setTxt('memSaudeTotalAnual', fmtMoeda(dados.totalSaudeNovo * 13));
+
+  // 5. IRRF Oficial (Comparativo Legal vs Simplificado)
+  const irrfDet = detalharIrrfCompleto(dados.salarioNovo, dados.inssNovo, dados.funcefNovo, dados.depsParaIrrf);
+  setTxt('memIrrfBaseLegalSal', fmtMoeda(dados.salarioNovo));
+  setTxt('memIrrfBaseLegalInss', `- ${fmtMoeda(dados.inssNovo)}`);
+  setTxt('memIrrfBaseLegalFuncef', `- ${fmtMoeda(irrfDet.funcefDedutivel)}`);
+  setTxt('memIrrfBaseLegalDeps', `- ${fmtMoeda(irrfDet.deducaoDeps)} (${dados.depsParaIrrf} deps)`);
+  setTxt('memIrrfBaseLegal', fmtMoeda(irrfDet.baseLegal));
+  setTxt('memIrrfLegalBruto', fmtMoeda(irrfDet.irrfLegalBruto));
+  setTxt('memIrrfLegalRedutor', irrfDet.redutorLegal > 0 ? `- ${fmtMoeda(irrfDet.redutorLegal)}` : 'R$ 0,00');
+  setTxt('memIrrfLegalFinal', fmtMoeda(irrfDet.irrfLegalFinal));
+
+  setTxt('memIrrfBaseSimpSal', fmtMoeda(dados.salarioNovo));
+  setTxt('memIrrfBaseSimpDesc', `- R$ 607,20`);
+  setTxt('memIrrfBaseSimp', fmtMoeda(irrfDet.baseSimplificada));
+  setTxt('memIrrfSimpBruto', fmtMoeda(irrfDet.irrfSimplificadoBruto));
+  setTxt('memIrrfSimpRedutor', irrfDet.redutorSimplificado > 0 ? `- ${fmtMoeda(irrfDet.redutorSimplificado)}` : 'R$ 0,00');
+  setTxt('memIrrfSimpFinal', fmtMoeda(irrfDet.irrfSimplificadoFinal));
+
+  if (irrfDet.regimeEscolhido === 'simplificado') {
+    setHtml('memIrrfRegimeBadge', `<span class="bg-blue-100 text-blue-900 text-xs font-black uppercase px-2.5 py-1 rounded-md"><i class="fa-solid fa-award mr-1"></i>Regime Mais Vantajoso: Desconto Simplificado (R$ 607,20)</span>`);
+  } else {
+    setHtml('memIrrfRegimeBadge', `<span class="bg-emerald-100 text-emerald-900 text-xs font-black uppercase px-2.5 py-1 rounded-md"><i class="fa-solid fa-award mr-1"></i>Regime Mais Vantajoso: Deduções Legais (INSS, FUNCEF e Dependentes)</span>`);
+  }
+  setTxt('memIrrfValorFinal', fmtMoeda(irrfDet.irrfFinal));
+
+  // 6. Fechamento do Líquido & Auditoria de Integridade
+  setTxt('memFechamentoBruto', fmtMoeda(dados.salarioNovo));
+  setTxt('memFechamentoInss', `- ${fmtMoeda(dados.inssNovo)}`);
+  setTxt('memFechamentoFuncef', `- ${fmtMoeda(dados.funcefNovo)}`);
+  setTxt('memFechamentoSaude', `- ${fmtMoeda(dados.totalSaudeNovo)}`);
+  setTxt('memFechamentoIrrf', `- ${fmtMoeda(dados.irrfNovo)}`);
+  setTxt('memFechamentoOutros', `- ${fmtMoeda(dados.outrosDesc)}`);
+  setTxt('memFechamentoTotalDescontos', fmtMoeda(dados.totalDescontosNovo));
+  setTxt('memFechamentoLiquido', fmtMoeda(dados.liquidoNovo));
+
+  const delta = Math.abs(dados.salarioNovo - (dados.totalDescontosNovo + dados.liquidoNovo));
+  const auditoriaOk = delta < 0.01;
+  setHtml('memAuditoriaStatus', auditoriaOk
+    ? `<span class="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full text-xs font-black"><i class="fa-solid fa-circle-check"></i> Auditoria 100% Precisa: Diferença de R$ 0,00</span>`
+    : `<span class="inline-flex items-center gap-1.5 text-rose-700 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full text-xs font-black"><i class="fa-solid fa-triangle-exclamation"></i> Discrepância de ${fmtMoeda(delta)}</span>`
+  );
+
+  // 7. Balanço Anual Consolidado
+  setTxt('memBalancoFolhasLiq', (dados.ganhoSalarialLiqAnual >= 0 ? '+' : '') + fmtMoeda(dados.ganhoSalarialLiqAnual));
+  setTxt('memBalancoSaude13', (dados.difSaudeAnual >= 0 ? '+' : '') + fmtMoeda(dados.difSaudeAnual));
+  setTxt('memBalancoSaldoFinal', (dados.saldoAnualTotal >= 0 ? '+' : '') + fmtMoeda(dados.saldoAnualTotal) + ' / ano');
+}
+
