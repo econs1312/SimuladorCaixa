@@ -79,12 +79,13 @@ Os dados e coeficientes aplicados nesta ferramenta foram auditados e cruzados en
      - **Teto do grupo familiar:** 9% da remuneração base.
      - **Dependentes indiretos e especiais fora do teto:** Filhos de 21 a 24 anos (R$ 660,00) e pais/judiciais/24-27 anos (R$ 900,00).
      - **13 Mensalidades ao ano:** Cobrança mantida de 13 mensalidades anuais (12 regulares + 13º salário).
-     - **Coparticipação anual:** Teto máximo reduzido de R$ 4.800 para R$ 4.700/ano.
-     - **Pronto-socorro:** Redução da coparticipação em atendimentos de emergência de R$ 150 para R$ 120.
+     - **Coparticipação anual:** Teto máximo proposto de R$ 4.700,00/ano por grupo familiar.
+     - **Pronto-socorro:** Coparticipação proposta de R$ 120,00 por atendimento de emergência.
      - **Telemedicina:** 100% isenta de coparticipação.
-     - **Custeio CAIXA:** Limite de participação do banco elevado para até 9% da folha de pagamento.
+     - **Custeio CAIXA:** Limite de participação do banco elevado de 6,5% para até 9% da folha de pagamento.
      - **Investimento em prevenção:** R$ 236 milhões em 2027.
      - **Adesão e permanência:** Regra mantida com vedação de reingresso ao plano após cancelamento.
+     - *(Nota: A menção patronal de 'redução' para R$ 4.700 e R$ 120 foi calculada pela CAIXA frente à proposta anterior que foi rejeitada pelos empregados, e não em relação ao que vigora no ACT).*
 
 2. **[CONTRAF-CUT](https://contrafcut.com.br)** (Confederação Nacional dos Trabalhadores do Ramo Financeiro):
    - Relatórios da CEE/Caixa (Comissão Executiva dos Empregados da CAIXA).
@@ -100,7 +101,7 @@ Os dados e coeficientes aplicados nesta ferramenta foram auditados e cruzados en
      - Dependentes indiretos (filhos 21 a 24 anos): **R$ 660,00** (fora do teto familiar).
      - Filhos de 24 a 27 anos, pais e dependentes judiciais: **R$ 900,00** (fora do teto).
      - Regra da trava de **9% da remuneração base** para o grupo familiar com taxa mínima de **R$ 50,00 por dependente excedente**.
-     - Redução do pronto atendimento de R$ 150 para R$ 120.
+     - Coparticipação em pronto atendimento proposta em **R$ 120,00**.
 4. **Federações e Sindicatos Regionais** (SintrafPCR, Bahia/Feira, Paraná, Rio de Janeiro):
    - Boletins deliberativos de assembleias e análises atuariais convergentes.
 5. **Legislação Tributária e Previdenciária Oficial:**
