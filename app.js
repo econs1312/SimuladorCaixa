@@ -3,13 +3,13 @@
 // Engine de Cálculos Financeiros, Tributários e Previdenciários
 // =============================================================================
 
-// INSS Progressivo Oficial (Tabela Vigente)
+// INSS Progressivo Oficial (Portaria Interministerial MPS/MF nº 13/2026)
 function calcularInss(salario) {
   let imposto = 0;
-  const f1 = 1412.00;
-  const f2 = 2666.68;
-  const f3 = 4000.03;
-  const tetoRgps = 7786.02;
+  const f1 = 1621.00;
+  const f2 = 2902.84;
+  const f3 = 4354.27;
+  const tetoRgps = 8475.55;
 
   if (salario <= f1) {
     imposto = salario * 0.075;
@@ -25,17 +25,32 @@ function calcularInss(salario) {
   return Math.round(imposto * 100) / 100;
 }
 
-// Faixas da Tabela Progressiva Mensal de IRRF
+// Faixas da Tabela Progressiva Mensal de IRRF (Lei nº 15.191/2025)
 function calcularFaixasIrrf(base) {
-  if (base <= 2259.20) return 0;
-  if (base <= 2826.65) return (base * 0.075) - 169.44;
-  if (base <= 3751.05) return (base * 0.15) - 381.44;
-  if (base <= 4664.68) return (base * 0.225) - 662.77;
-  return (base * 0.275) - 896.00;
+  if (base <= 2428.80) return 0;
+  if (base <= 2826.65) return (base * 0.075) - 182.16;
+  if (base <= 3751.05) return (base * 0.15) - 394.16;
+  if (base <= 4664.68) return (base * 0.225) - 675.49;
+  return (base * 0.275) - 908.73;
 }
 
-// Cálculo Oficial de IRRF na Fonte com comparativo Legal vs. Desconto Simplificado (R$ 564,80)
-// Conforme Lei 9.532/97 art. 11 (Teto 12% FUNCEF) e Lei 14.848/2024
+// Redutor Adicional de IRRF (Lei nº 15.270/2025)
+// Aplica-se após o cálculo da tabela progressiva para ampliar a isenção efetiva
+function aplicarRedutorIrrf2026(impostoCalculado, rendimentosTributaveis) {
+  if (rendimentosTributaveis <= 5000.00) {
+    // Redução de até R$ 312,89 — zerando o imposto para rendas até R$ 5.000
+    return Math.max(0, impostoCalculado - Math.min(312.89, impostoCalculado));
+  } else if (rendimentosTributaveis <= 7350.00) {
+    // Redução decrescente linear entre R$ 5.000,01 e R$ 7.350,00
+    const redutor = 978.62 - (0.133145 * rendimentosTributaveis);
+    return Math.max(0, impostoCalculado - Math.max(0, redutor));
+  }
+  // Acima de R$ 7.350,00: sem redutor adicional
+  return impostoCalculado;
+}
+
+// Cálculo Oficial de IRRF na Fonte com comparativo Legal vs. Desconto Simplificado (R$ 607,20)
+// Conforme Lei 9.532/97 art. 11 (Teto 12% FUNCEF), Lei 15.191/2025 e Lei 15.270/2025 (Redutor)
 function calcularIrrfOficial(salario, inss, funcef, numDepsIrrf) {
   const tetoFuncef12 = salario * 0.12;
   const funcefDedutivel = Math.min(funcef, tetoFuncef12);
@@ -43,11 +58,15 @@ function calcularIrrfOficial(salario, inss, funcef, numDepsIrrf) {
 
   // 1. Deduções Legais
   const baseLegal = Math.max(0, salario - inss - funcefDedutivel - deducaoDeps);
-  const irrfLegal = Math.max(0, calcularFaixasIrrf(baseLegal));
+  let irrfLegal = Math.max(0, calcularFaixasIrrf(baseLegal));
+  // Aplicar redutor adicional (Lei 15.270/2025) sobre a base legal
+  irrfLegal = aplicarRedutorIrrf2026(irrfLegal, baseLegal);
 
-  // 2. Desconto Simplificado Mensal (R$ 564,80)
-  const baseSimplificada = Math.max(0, salario - 564.80);
-  const irrfSimplificado = Math.max(0, calcularFaixasIrrf(baseSimplificada));
+  // 2. Desconto Simplificado Mensal (R$ 607,20 — Lei 15.191/2025)
+  const baseSimplificada = Math.max(0, salario - 607.20);
+  let irrfSimplificado = Math.max(0, calcularFaixasIrrf(baseSimplificada));
+  // Aplicar redutor adicional (Lei 15.270/2025) sobre a base simplificada
+  irrfSimplificado = aplicarRedutorIrrf2026(irrfSimplificado, baseSimplificada);
 
   if (irrfSimplificado < irrfLegal) {
     return {
@@ -96,57 +115,6 @@ function fmtMoeda(val) {
   return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// Seletor Rápido de Perfis / Personas
-function aplicarPerfil(tipo) {
-  ['btnPerfilSolteiro', 'btnPerfilFamilia', 'btnPerfilUniv', 'btnPerfilAposentado'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('perfil-ativo');
-  });
-
-  if (tipo === 'solteiro') {
-    document.getElementById('salarioBase').value = 5000;
-    document.getElementById('depDiretos').value = 0;
-    document.getElementById('depIndiretos').value = 0;
-    document.getElementById('depEspeciais').value = 0;
-    document.getElementById('aliquotaFuncef').value = 8;
-    document.getElementById('funcefLabel').innerText = '8.0%';
-    const btn = document.getElementById('btnPerfilSolteiro');
-    if (btn) btn.classList.add('perfil-ativo');
-  } else if (tipo === 'familia') {
-    document.getElementById('salarioBase').value = 8500;
-    document.getElementById('depDiretos').value = 2;
-    document.getElementById('depIndiretos').value = 0;
-    document.getElementById('depEspeciais').value = 0;
-    document.getElementById('aliquotaFuncef').value = 8;
-    document.getElementById('funcefLabel').innerText = '8.0%';
-    const btn = document.getElementById('btnPerfilFamilia');
-    if (btn) btn.classList.add('perfil-ativo');
-  } else if (tipo === 'universitario') {
-    document.getElementById('salarioBase').value = 16000;
-    document.getElementById('depDiretos').value = 1;
-    document.getElementById('depIndiretos').value = 1;
-    document.getElementById('depEspeciais').value = 0;
-    document.getElementById('aliquotaFuncef').value = 10;
-    document.getElementById('funcefLabel').innerText = '10.0%';
-    const btn = document.getElementById('btnPerfilUniv');
-    if (btn) btn.classList.add('perfil-ativo');
-  } else if (tipo === 'aposentado') {
-    document.getElementById('salarioBase').value = 6000;
-    document.getElementById('depDiretos').value = 1;
-    document.getElementById('depIndiretos').value = 0;
-    document.getElementById('depEspeciais').value = 0;
-    document.getElementById('aliquotaFuncef').value = 0;
-    document.getElementById('funcefLabel').innerText = '0.0%';
-    const btn = document.getElementById('btnPerfilAposentado');
-    if (btn) btn.classList.add('perfil-ativo');
-  }
-
-  // Sincroniza campos espelhados na aba Contracheque
-  syncInputs('salarioBase', 'salarioBaseTab2');
-  syncInputs('depDiretos', 'depDiretosTab2');
-
-  recalcular();
-}
 
 function recalcular() {
   const salarioBase = parseFloat(document.getElementById('salarioBase').value) || 0;
@@ -312,8 +280,8 @@ function recalcular() {
     elSaldoAnualMensalEq.className = `text-[10px] font-bold ${saldoAnualMensalEq >= 0 ? 'text-emerald-700' : 'text-rose-700'}`;
   }
 
-  // Atualização do Termômetro e Matriz de Decisão
-  atualizarTermometroEDecisao(saldoAnualTotal, ganhoSalarialLiqAnual, difSaudeAnual, difLiquido);
+  // Atualização do Termômetro e Resumo Neutro
+  atualizarTermometroEResumo(saldoAnualTotal, ganhoSalarialLiqAnual, difSaudeAnual, difLiquido, salarioBase, salarioNovo, totalSaudeHoje, totalSaudeNovo, liquidoHoje, liquidoNovo);
 
   // Atualização da Tabela de Folha
   document.getElementById('tbSalHoje').innerText = fmtMoeda(salarioBase);
@@ -370,7 +338,7 @@ function recalcular() {
 
   let irrfDescMsg = '';
   if (irrfInfoNovo.regime === 'simplificado') {
-    irrfDescMsg = 'Desconto Simplificado de R$ 564,80 aplicado (mais vantajoso)';
+    irrfDescMsg = 'Desconto Simplificado de R$ 607,20 aplicado (mais vantajoso)';
   } else {
     irrfDescMsg = `Deduções Legais (INSS, FUNCEF e ${fmtMoeda(depsParaIrrf * 189.59)} de ${depsParaIrrf} dependente(s))`;
   }
@@ -389,14 +357,12 @@ function recalcular() {
   aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxaReal, salarioNovo, liquidoHoje, liquidoNovo);
 }
 
-function atualizarTermometroEDecisao(saldoAnualTotal, ganhoSalarialLiqAnual, difSaudeAnual, difLiquido) {
+function atualizarTermometroEResumo(saldoAnualTotal, ganhoSalarialLiqAnual, difSaudeAnual, difLiquido, salarioBase, salarioNovo, totalSaudeHoje, totalSaudeNovo, liquidoHoje, liquidoNovo) {
   const badge = document.getElementById('badgeTermometro');
   const icon = document.getElementById('iconTermometro');
   const desc = document.getElementById('descTermometro');
   const barra = document.getElementById('barraTermometro');
   const card = document.getElementById('cardBalancoAnual');
-  const boxAprovar = document.getElementById('boxDecisaoAprovar');
-  const boxRejeitar = document.getElementById('boxDecisaoRejeitar');
 
   if (saldoAnualTotal > 600) {
     if (badge) {
@@ -420,7 +386,7 @@ function atualizarTermometroEDecisao(saldoAnualTotal, ganhoSalarialLiqAnual, dif
   } else if (saldoAnualTotal >= -600 && saldoAnualTotal <= 600) {
     if (badge) {
       badge.className = "text-[10px] uppercase font-black px-2.5 py-1 rounded-md bg-amber-100 text-amber-900";
-      badge.innerText = "Zona de Equilíbrio / Alerta";
+      badge.innerText = "Zona de Equilíbrio";
     }
     if (icon) {
       icon.className = "w-8 h-8 rounded-full flex items-center justify-center text-base bg-amber-100 text-amber-700";
@@ -457,29 +423,65 @@ function atualizarTermometroEDecisao(saldoAnualTotal, ganhoSalarialLiqAnual, dif
     }
   }
 
-  // Atualização dos Boxes da Matriz de Decisão
-  if (boxAprovar) {
-    let detalheAprovar = `• Variação mensal líquida em folha: <strong>${(difLiquido >= 0 ? '+' : '')}${fmtMoeda(difLiquido)}/mês</strong><br>`;
-    detalheAprovar += `• Custo adicional do Saúde CAIXA: <strong>${(difSaudeAnual >= 0 ? '+' : '')}${fmtMoeda(difSaudeAnual)}/ano</strong> (13 mensalidades)<br>`;
-    detalheAprovar += `• Saldo anual no patrimônio: <strong class="${saldoAnualTotal >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${(saldoAnualTotal >= 0 ? '+' : '')}${fmtMoeda(saldoAnualTotal)}/ano</strong>`;
-    boxAprovar.innerHTML = detalheAprovar;
-  }
+  // ============================================
+  // RESUMO NEUTRO DA SITUAÇÃO FINANCEIRA (Aba 1)
+  // ============================================
+  const difBruto = salarioNovo - salarioBase;
+  const difSaudeMensal = totalSaudeNovo - totalSaudeHoje;
 
+  const setEl = (id, text, cls) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.innerText = text;
+      if (cls) el.className = cls;
+    }
+  };
+
+  setEl('resumoBrutoHoje', fmtMoeda(salarioBase));
+  setEl('resumoBrutoNovo', fmtMoeda(salarioNovo));
+  setEl('resumoBrutoDif', '+' + fmtMoeda(difBruto), 'py-2 text-right font-bold text-emerald-700');
+
+  setEl('resumoSaudeHoje', fmtMoeda(totalSaudeHoje));
+  setEl('resumoSaudeNovo', fmtMoeda(totalSaudeNovo));
+  setEl('resumoSaudeDifMensal',
+    (difSaudeMensal >= 0 ? '+' : '') + fmtMoeda(difSaudeMensal),
+    `py-2 text-right font-bold ${difSaudeMensal > 0 ? 'text-rose-600' : (difSaudeMensal < 0 ? 'text-emerald-600' : 'text-slate-500')}`
+  );
+
+  setEl('resumoLiqHoje', fmtMoeda(liquidoHoje));
+  setEl('resumoLiqNovo', fmtMoeda(liquidoNovo));
+  setEl('resumoLiqDif',
+    (difLiquido >= 0 ? '+' : '') + fmtMoeda(difLiquido),
+    `py-2.5 text-right rounded-r-lg font-extrabold ${difLiquido >= 0 ? 'text-emerald-700' : 'text-rose-700'}`
+  );
+
+  setEl('resumoSaudeAnualDif',
+    (difSaudeAnual >= 0 ? '+' : '') + fmtMoeda(difSaudeAnual) + '/ano',
+    `text-sm font-extrabold mt-0.5 ${difSaudeAnual > 0 ? 'text-rose-600' : (difSaudeAnual < 0 ? 'text-emerald-600' : 'text-slate-500')}`
+  );
+
+  setEl('resumoSaldoAnual',
+    (saldoAnualTotal >= 0 ? '+' : '') + fmtMoeda(saldoAnualTotal) + '/ano',
+    `text-sm font-extrabold mt-0.5 ${saldoAnualTotal >= 0 ? 'text-emerald-700' : 'text-rose-700'}`
+  );
+
+  // ============================================
+  // BOXES NEUTROS NA ABA 3 (Matriz de Decisão)
+  // ============================================
   const boxAprovarTab3 = document.getElementById('boxDecisaoAprovarTab3');
-  if (boxAprovarTab3 && boxAprovar) {
-    boxAprovarTab3.innerHTML = boxAprovar.innerHTML;
-  }
-
-  if (boxRejeitar) {
-    let detalheRejeitar = `• Mantém o Saúde CAIXA na tabela atual (economia de ${(difSaudeAnual >= 0 ? '+' : '')}${fmtMoeda(difSaudeAnual)}/ano frente à proposta)<br>`;
-    detalheRejeitar += `• Deixa de receber imediatamente <strong>${(ganhoSalarialLiqAnual >= 0 ? '+' : '')}${fmtMoeda(ganhoSalarialLiqAnual)}/ano</strong> de aumento salarial líquido<br>`;
-    detalheRejeitar += `• Mantém o risco atuarial de chamada extraordinária para cobertura do déficit de 2026`;
-    boxRejeitar.innerHTML = detalheRejeitar;
+  if (boxAprovarTab3) {
+    let txt = `• Salário bruto: ${fmtMoeda(salarioBase)} → <strong>${fmtMoeda(salarioNovo)}</strong><br>`;
+    txt += `• Saúde CAIXA mensal: ${fmtMoeda(totalSaudeHoje)} → <strong>${fmtMoeda(totalSaudeNovo)}</strong> (${(difSaudeMensal >= 0 ? '+' : '')}${fmtMoeda(difSaudeMensal)})<br>`;
+    txt += `• Líquido no bolso: ${fmtMoeda(liquidoHoje)} → <strong>${fmtMoeda(liquidoNovo)}</strong> (<span class="${difLiquido >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${(difLiquido >= 0 ? '+' : '')}${fmtMoeda(difLiquido)}/mês</span>)`;
+    boxAprovarTab3.innerHTML = txt;
   }
 
   const boxRejeitarTab3 = document.getElementById('boxDecisaoRejeitarTab3');
-  if (boxRejeitarTab3 && boxRejeitar) {
-    boxRejeitarTab3.innerHTML = boxRejeitar.innerHTML;
+  if (boxRejeitarTab3) {
+    let txt = `• Salário bruto: <strong>${fmtMoeda(salarioBase)}</strong> (sem alteração)<br>`;
+    txt += `• Saúde CAIXA mensal: <strong>${fmtMoeda(totalSaudeHoje)}</strong> (tabela atual mantida)<br>`;
+    txt += `• Líquido no bolso: <strong>${fmtMoeda(liquidoHoje)}</strong> (sem alteração imediata)`;
+    boxRejeitarTab3.innerHTML = txt;
   }
 }
 

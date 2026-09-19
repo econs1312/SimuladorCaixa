@@ -15,11 +15,10 @@ Este projeto está hospedado e integrado à **[Vercel](https://vercel.com)**:
 
 ## 📊 Funcionalidades
 
-- **Subsídio à Tomada de Decisão Coletiva (Aprovar vs. Rejeitar):**
-  - **Matriz de Decisão Lado a Lado:** Apresentação clara e imparcial de ganhos, contrapartidas e riscos nos cenários de Aprovação e Rejeição do ACT.
+- **Subsídio à Tomada de Decisão Coletiva:**
+  - **Matriz Comparativa e Cenários:** Apresentação factual de ganhos, contrapartidas e desdobramentos possíveis com ou sem o novo ACT.
   - **Balanço Anual Consolidado (12 Meses):** Equação completa somando a variação salarial líquida anual (12 salários + 13º salário + 1/3 constitucional de férias) confrontada com as 13 mensalidades oficiais do Saúde CAIXA.
   - **Termômetro da Decisão no Bolso:** Indicador visual inteligente (Saldo Positivo, Zona de Alerta/Empate, Saldo Negativo) demonstrando se a proposta gera ganho ou perda patrimonial no ano.
-  - **Simulação Rápida por Perfis (Personas):** 1 clique para carregar cenários típicos (*Novato/Solteiro*, *Família Direta*, *Filhos Universitários*, *Aposentado/Pensionista*).
 - **Cálculo de Remuneração e Reajuste:**
   - Aplicação de INPC (4,00%) e Ganho Real (0,60%) sobre o Salário Base e Funções Gratificadas.
   - Seleção rápida de faixas salariais (5k a 30k).
