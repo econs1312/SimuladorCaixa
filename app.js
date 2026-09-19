@@ -68,8 +68,27 @@ function calcularIrrfOficial(salario, inss, funcef, numDepsIrrf) {
   }
 }
 
+function syncInputs(sourceId, targetId) {
+  const src = document.getElementById(sourceId);
+  const tgt = document.getElementById(targetId);
+  if (src && tgt && src.value !== tgt.value) {
+    tgt.value = src.value;
+  }
+}
+
+function syncCheckboxes(sourceId, targetId) {
+  const src = document.getElementById(sourceId);
+  const tgt = document.getElementById(targetId);
+  if (src && tgt && src.checked !== tgt.checked) {
+    tgt.checked = src.checked;
+  }
+}
+
 function setSalario(val) {
-  document.getElementById('salarioBase').value = val;
+  const el1 = document.getElementById('salarioBase');
+  const el2 = document.getElementById('salarioBaseTab2');
+  if (el1) el1.value = val;
+  if (el2) el2.value = val;
   recalcular();
 }
 
@@ -125,6 +144,12 @@ function aplicarPerfil(tipo) {
     const btn = document.getElementById('btnPerfilAposentado');
     if (btn) btn.classList.add('perfil-ativo');
   }
+
+  // Sincroniza campos espelhados na aba Contracheque
+  syncInputs('salarioBase', 'salarioBaseTab2');
+  syncInputs('depDiretos', 'depDiretosTab2');
+  syncCheckboxes('incluirVaVr', 'incluirVaVrTab2');
+
   recalcular();
 }
 
@@ -462,6 +487,11 @@ function atualizarTermometroEDecisao(saldoAnualTotal, ganhoSalarialLiqAnual, dif
     boxAprovar.innerHTML = detalheAprovar;
   }
 
+  const boxAprovarTab3 = document.getElementById('boxDecisaoAprovarTab3');
+  if (boxAprovarTab3 && boxAprovar) {
+    boxAprovarTab3.innerHTML = boxAprovar.innerHTML;
+  }
+
   if (boxRejeitar) {
     let detalheRejeitar = `• Mantém o Saúde CAIXA na tabela atual (economia de ${(difSaudeAnual >= 0 ? '+' : '')}${fmtMoeda(difSaudeAnual)}/ano frente à proposta)<br>`;
     detalheRejeitar += `• Deixa de receber imediatamente <strong>${(ganhoSalarialLiqAnual >= 0 ? '+' : '')}${fmtMoeda(ganhoSalarialLiqAnual)}/ano</strong> de aumento salarial líquido<br>`;
@@ -470,6 +500,11 @@ function atualizarTermometroEDecisao(saldoAnualTotal, ganhoSalarialLiqAnual, dif
     }
     detalheRejeitar += `• Mantém o risco atuarial de chamada extraordinária para cobertura do déficit de 2026`;
     boxRejeitar.innerHTML = detalheRejeitar;
+  }
+
+  const boxRejeitarTab3 = document.getElementById('boxDecisaoRejeitarTab3');
+  if (boxRejeitarTab3 && boxRejeitar) {
+    boxRejeitarTab3.innerHTML = boxRejeitar.innerHTML;
   }
 }
 
@@ -535,7 +570,7 @@ function aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxa
   }
 }
 
-function copiarResumo() {
+function gerarTextoResumo() {
   const sal = document.getElementById('salarioBase').value;
   const liqH = document.getElementById('cardLiqHoje').innerText;
   const liqN = document.getElementById('cardLiqNovo').innerText;
@@ -565,11 +600,91 @@ function copiarResumo() {
   msg += `• Diagnóstico Econômico: ${verdict}\n\n` +
          `ℹ️ _Simulação independente para subsidiar o voto em assembleia fundamentada em dados oficiais da CAIXA Notícias e das entidades sindicais (CONTRAF-CUT, FENAE, SPBancários)._`;
 
+  return msg;
+}
+
+function copiarResumo() {
+  const msg = gerarTextoResumo();
   navigator.clipboard.writeText(msg).then(() => {
     alert('Demonstrativo completo de subsídio à decisão copiado para a área de transferência!');
+  }).catch(() => {
+    prompt('Copie o resumo da simulação abaixo:', msg);
   });
 }
 
+function compartilharWhatsApp() {
+  const texto = gerarTextoResumo();
+  const urlApp = window.location.href.split('#')[0];
+  const textoCompleto = `${texto}\n\n📲 Simule o impacto no seu contracheque:\n${urlApp}`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'Simulador Salário Líquido CAIXA',
+      text: textoCompleto,
+      url: urlApp
+    }).catch(() => {
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoCompleto)}`;
+      window.open(waUrl, '_blank');
+    });
+  } else {
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoCompleto)}`;
+    window.open(waUrl, '_blank');
+  }
+}
+
+// Controle e Navegação das Abas Mobile-First
+function trocarAba(abaId) {
+  const abas = ['veredito', 'contracheque', 'matriz'];
+  if (!abas.includes(abaId)) abaId = 'veredito';
+
+  abas.forEach(id => {
+    const btn = document.getElementById(`tab-btn-${id}`);
+    const content = document.getElementById(`tab-content-${id}`);
+
+    if (btn) {
+      if (id === abaId) {
+        btn.classList.add('tab-active');
+        btn.classList.remove('text-slate-600', 'font-bold');
+        btn.classList.add('text-blue-900', 'font-black');
+      } else {
+        btn.classList.remove('tab-active', 'text-blue-900', 'font-black');
+        btn.classList.add('text-slate-600', 'font-bold');
+      }
+    }
+
+    if (content) {
+      if (id === abaId) {
+        content.classList.remove('hidden');
+      } else {
+        content.classList.add('hidden');
+      }
+    }
+  });
+
+  try {
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, '#' + abaId);
+    }
+  } catch (e) {}
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 window.onload = function() {
+  const hash = (window.location.hash || '').replace('#', '');
+  if (hash === 'contracheque' || hash === 'matriz' || hash === 'fontes') {
+    if (hash === 'fontes') {
+      trocarAba('matriz');
+      setTimeout(() => {
+        const elFontes = document.getElementById('fontes');
+        if (elFontes) elFontes.scrollIntoView({ behavior: 'smooth' });
+      }, 200);
+    } else {
+      trocarAba(hash);
+    }
+  } else {
+    trocarAba('veredito');
+  }
+
   recalcular();
 };
