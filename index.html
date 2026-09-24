@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador Salário Líquido CAIXA - Proposta 16/09/2026</title>
+  <title>Simulador de Salário Líquido - Proposta do ACT 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
@@ -20,14 +20,14 @@
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen pb-12">
 
-  <!-- Header Institucional -->
+  <!-- Header Principal -->
   <header class="bg-gradient-to-r from-blue-900 via-blue-800 to-cyan-800 text-white shadow-md">
     <div class="max-w-4xl mx-auto px-4 py-5 sm:py-6">
       <div class="inline-block bg-amber-400 text-blue-950 text-[10px] sm:text-xs font-black uppercase px-2.5 py-0.5 rounded-full mb-1.5 tracking-wider">
-        Negociação Coletiva CAIXA
+        Negociação Coletiva • ACT 2026
       </div>
-      <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight">Simulador de Salário Líquido CAIXA</h1>
-      <p class="text-blue-100 text-xs sm:text-sm mt-0.5">Impacto real no bolso: Salário, INSS, IRRF, FUNCEF e novo custeio do Saúde CAIXA</p>
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight">Simulador de Salário Líquido</h1>
+      <p class="text-blue-100 text-xs sm:text-sm mt-0.5">Impacto real no bolso: Salário, INSS, IRRF, FUNCEF e novo custeio do Plano de Saúde</p>
     </div>
   </header>
 
@@ -37,7 +37,7 @@
       <div class="flex items-start gap-2">
         <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-sm flex-shrink-0"></i>
         <div class="leading-relaxed text-[11px] sm:text-xs">
-          <strong>Simulação independente:</strong> Fundamentada em dados oficiais da <strong>CAIXA Notícias</strong> e entidades sindicais (<strong>CONTRAF-CUT, FENAE, SPBancários</strong>).
+          <strong>Simulação independente (sem vínculo institucional):</strong> Fundamentada em dados públicos de negociação reportados por <strong>CAIXA Notícias</strong> e entidades sindicais (<strong>CONTRAF-CUT, FENAE, SPBancários</strong>).
         </div>
       </div>
       <button type="button" onclick="trocarAba('matriz'); setTimeout(() => { const el = document.getElementById('fontes'); if (el) el.scrollIntoView({behavior: 'smooth'}); }, 150);" class="inline-flex items-center gap-1 text-blue-700 hover:text-blue-900 font-bold bg-white/90 hover:bg-white px-2.5 py-1 rounded-lg border border-amber-200 transition flex-shrink-0 text-[11px] shadow-xs">
@@ -114,7 +114,7 @@
           <!-- Dependentes Diretos -->
           <div class="bg-blue-50/50 p-3.5 rounded-xl border border-blue-100 flex justify-between items-center">
             <div>
-              <span class="text-xs font-bold text-slate-800">Dependentes Diretos no Saúde CAIXA</span>
+              <span class="text-xs font-bold text-slate-800">Dependentes Diretos no Plano de Saúde</span>
               <p class="text-[10px] text-blue-700 font-medium">Cônjuge e filhos menores de 21 anos (R$ 560 cada • Teto familiar de 9%)</p>
               <p class="text-[10px] text-emerald-700 font-semibold mt-0.5"><i class="fa-solid fa-check mr-1"></i>Dedução legal de R$ 189,59/mês por dependente na base de cálculo do IRRF</p>
             </div>
@@ -155,7 +155,7 @@
       </div>
 
       <p class="text-[11px] text-slate-500 mb-3 leading-tight">
-        Ganho salarial líquido (13,33 folhas) vs Custo anual do Saúde CAIXA (13 mensalidades)
+        Ganho salarial líquido (13,33 folhas) vs Custo anual do Plano de Saúde (13 mensalidades)
       </p>
 
       <!-- Grid de Componentes do Balanço Anual -->
@@ -167,15 +167,15 @@
           <span class="text-[10px] text-slate-400 block mt-0.5">12 salários + 13º + 1/3 férias (líquidos)</span>
         </div>
 
-        <!-- Custo Anual Saúde CAIXA -->
+        <!-- Custo Anual Plano de Saúde -->
         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/80">
-          <span class="text-[10px] font-extrabold text-slate-500 uppercase block">- Saúde CAIXA</span>
+          <span class="text-[10px] font-extrabold text-slate-500 uppercase block">- Plano de Saúde</span>
           <div id="balancoSaudeDif" class="text-base font-black text-slate-900 mt-0.5">R$ 0,00</div>
           <span class="text-[10px] text-slate-400 block mt-0.5">Diferença de custo em 13 mensalidades</span>
         </div>
       </div>
 
-      <!-- Caixa Destacada de Resultado Consolidado Anual -->
+      <!-- Bloco Destacado de Resultado Consolidado Anual -->
       <div class="bg-blue-50/60 border border-blue-100 rounded-xl p-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <div>
           <span class="text-[10px] uppercase font-extrabold text-slate-500 block">SALDO LÍQUIDO CONSOLIDADO NO ANO (12 MESES)</span>
@@ -227,7 +227,7 @@
               <td id="resumoBrutoDif" class="py-2 text-right font-bold text-emerald-700">R$ 0,00</td>
             </tr>
             <tr class="border-b border-slate-50">
-              <td class="py-2 text-slate-600">Saúde CAIXA (mensal)</td>
+              <td class="py-2 text-slate-600">Plano de Saúde (mensal)</td>
               <td id="resumoSaudeHoje" class="py-2 text-right">R$ 0,00</td>
               <td id="resumoSaudeNovo" class="py-2 text-right text-blue-700 font-bold">R$ 0,00</td>
               <td id="resumoSaudeDifMensal" class="py-2 text-right font-bold">R$ 0,00</td>
@@ -246,7 +246,7 @@
 
       <div class="mt-3 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
         <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
-          <span class="text-[10px] uppercase font-bold text-slate-400 block">Saúde CAIXA (variação anual, 13×)</span>
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">Plano de Saúde (variação anual, 13×)</span>
           <p id="resumoSaudeAnualDif" class="text-sm font-extrabold mt-0.5">R$ 0,00</p>
         </div>
         <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
@@ -293,7 +293,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
       <h2 class="text-base font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center justify-between">
         <span class="flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-blue-600"></i> Parâmetros Avançados de Folha & Saúde CAIXA
+          <i class="fa-solid fa-sliders text-blue-600"></i> Parâmetros Avançados de Folha & Plano de Saúde
         </span>
         <button type="button" onclick="trocarAba('veredito')" class="text-xs text-blue-600 hover:underline font-semibold">
           ⬅️ Ver Veredito
@@ -366,7 +366,7 @@
           </div>
         </div>
 
-        <!-- Dependentes Saúde CAIXA e VA/VR -->
+        <!-- Dependentes do Plano de Saúde e VA/VR -->
         <div class="space-y-3">
           <!-- Diretos -->
           <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100 flex justify-between items-center">
@@ -479,10 +479,10 @@
               <td id="tbFuncefDif" class="p-3 text-right text-rose-500">+R$ 0,00</td>
             </tr>
 
-            <!-- Saúde CAIXA No Teto (Titular + Diretos) -->
+            <!-- Plano de Saúde No Teto (Titular + Diretos) -->
             <tr class="bg-blue-50/20">
               <td class="p-3 text-slate-800">
-                <div class="font-bold text-slate-900">Saúde CAIXA: Titular e Dep. Diretos</div>
+                <div class="font-bold text-slate-900">Plano de Saúde: Titular e Dep. Diretos</div>
                 <span id="tbTravaTetoMsg" class="block text-[10px] text-slate-500 mt-0.5"></span>
               </td>
               <td id="tbSaudeDiretosHoje" class="p-3 text-right font-semibold">R$ 0,00</td>
@@ -490,10 +490,10 @@
               <td id="tbSaudeDiretosDif" class="p-3 text-right font-bold text-rose-600">+R$ 0,00</td>
             </tr>
 
-            <!-- Saúde CAIXA Fora do Teto (Indiretos e Especiais) -->
+            <!-- Plano de Saúde Fora do Teto (Indiretos e Especiais) -->
             <tr class="bg-blue-50/10">
               <td class="p-3 text-slate-800">
-                <div class="font-medium text-slate-800">Saúde CAIXA: Dependentes Fora do Teto</div>
+                <div class="font-medium text-slate-800">Plano de Saúde: Dependentes Fora do Teto</div>
                 <span class="block text-[10px] text-slate-400">Filhos 21-24 anos (R$ 660) + Filhos 24-27/Pais (R$ 900)</span>
               </td>
               <td id="tbSaudeForaHoje" class="p-3 text-right">R$ 0,00</td>
@@ -532,14 +532,14 @@
       </div>
     </div>
 
-    <!-- Card Impacto Anual do Saúde CAIXA (13 Mensalidades) -->
+    <!-- Card Impacto Anual do Plano de Saúde (13 Mensalidades) -->
     <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-5 shadow-sm border border-blue-900/50">
       <div class="flex items-center justify-between pb-3 border-b border-blue-800/60">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-calendar-days text-amber-400 text-lg"></i>
           <div>
-            <h4 class="font-bold text-sm text-white">Impacto Anual do Saúde CAIXA (13 Mensalidades)</h4>
-            <p class="text-[11px] text-blue-200">A CAIXA cobra 13 mensalidades ao ano (12 meses regulares + 13º salário)</p>
+            <h4 class="font-bold text-sm text-white">Impacto Anual do Plano de Saúde (13 Mensalidades)</h4>
+            <p class="text-[11px] text-blue-200">São cobradas 13 mensalidades ao ano (12 meses regulares + 13º salário)</p>
           </div>
         </div>
         <span class="text-[10px] bg-blue-800/80 text-amber-300 font-bold px-2 py-0.5 rounded uppercase tracking-wider">Regra Oficial</span>
@@ -593,7 +593,7 @@
           </div>
           <h2 class="text-lg sm:text-2xl font-black text-slate-900">Memorial de Cálculo para Conferência</h2>
           <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
-            Fórmulas, bases legais, alíquotas oficiais e verificação transparente da trava de 9% do Saúde CAIXA.
+            Fórmulas, bases legais, alíquotas oficiais e verificação transparente da trava de 9% do Plano de Saúde.
           </p>
         </div>
         <div class="flex items-center gap-2">
@@ -774,13 +774,13 @@
       </div>
     </div>
 
-    <!-- 4. BLOCO: SAÚDE CAIXA E AUDITORIA DA TRAVA DE 9% -->
+    <!-- 4. BLOCO: PLANO DE SAÚDE E AUDITORIA DA TRAVA DE 9% -->
     <div class="bg-white rounded-2xl p-5 border-2 border-blue-200 shadow-sm space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
         <div>
           <h3 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-blue-600 text-white inline-flex items-center justify-center text-xs font-black">4</span>
-            Saúde CAIXA: Auditoria Estrita da Trava do Teto de 9,0%
+            Plano de Saúde: Auditoria Estrita da Trava do Teto de 9,0%
           </h3>
           <p class="text-[11px] text-blue-700 font-semibold mt-0.5">
             Demonstração técnica da aplicação do teto estatutário do grupo familiar direto
@@ -880,11 +880,11 @@
                 <td id="memSaudeDepEspecialVal" class="py-2 text-right font-bold text-slate-900">R$ 0,00</td>
               </tr>
               <tr class="bg-blue-50/70 font-black text-blue-950">
-                <td colspan="2" class="py-2.5 px-2 text-sm">TOTAL SAÚDE CAIXA MENSAL EM FOLHA</td>
+                <td colspan="2" class="py-2.5 px-2 text-sm">TOTAL PLANO DE SAÚDE MENSAL EM FOLHA</td>
                 <td id="memSaudeTotalMensal" class="py-2.5 px-2 text-right text-base font-black text-blue-900">R$ 0,00</td>
               </tr>
               <tr class="bg-slate-100 font-bold text-slate-800">
-                <td colspan="2" class="py-2 px-2 text-xs">CUSTO TOTAL ANUAL SAÚDE CAIXA (13 mensalidades oficiais)</td>
+                <td colspan="2" class="py-2 px-2 text-xs">CUSTO TOTAL ANUAL PLANO DE SAÚDE (13 mensalidades)</td>
                 <td id="memSaudeTotalAnual" class="py-2 px-2 text-right font-black text-slate-900">R$ 0,00</td>
               </tr>
             </tbody>
@@ -993,7 +993,7 @@
       <div class="bg-blue-50/70 p-3 rounded-xl border border-blue-100 flex justify-between items-center text-xs">
         <div>
           <span class="font-bold text-blue-950 block">Desconto Oficial do IRRF Efetivado na Folha</span>
-          <span class="text-[10px] text-blue-700">A CAIXA aplica automaticamente a opção mais econômica para o trabalhador</span>
+          <span class="text-[10px] text-blue-700">A fonte pagadora aplica automaticamente a opção mais econômica para o trabalhador</span>
         </div>
         <span id="memIrrfValorFinal" class="text-base font-black text-blue-900">R$ 0,00</span>
       </div>
@@ -1025,7 +1025,7 @@
               <td id="memFechamentoFuncef" class="py-2 px-3 text-right font-medium text-slate-700">- R$ 0,00</td>
             </tr>
             <tr>
-              <td class="py-2 px-3 text-slate-600 font-medium">(-) Saúde CAIXA (Titular com trava 9% + Dependentes)</td>
+              <td class="py-2 px-3 text-slate-600 font-medium">(-) Plano de Saúde (Titular com trava 9% + Dependentes)</td>
               <td id="memFechamentoSaude" class="py-2 px-3 text-right font-medium text-slate-700">- R$ 0,00</td>
             </tr>
             <tr>
@@ -1060,7 +1060,7 @@
             Equação do Balanço Anual Consolidado (12 Meses)
           </h3>
           <p class="text-[11px] text-blue-200">
-            Variação Salarial Líquida Anual (13,33 folhas líquidas) confrontada com as 13 mensalidades do Saúde CAIXA
+            Variação Salarial Líquida Anual (13,33 folhas líquidas) confrontada com as 13 mensalidades do Plano de Saúde
           </p>
         </div>
         <span class="text-[10px] bg-blue-800 text-amber-300 font-black px-2 py-0.5 rounded uppercase tracking-wider">Fechamento</span>
@@ -1073,7 +1073,7 @@
           <span class="text-[10px] text-slate-400">13,33 remunerações líquidas</span>
         </div>
         <div class="bg-white/5 p-3.5 rounded-xl border border-white/10">
-          <span class="text-[10px] uppercase font-bold text-slate-300 block">Custo Adicional Saúde CAIXA</span>
+          <span class="text-[10px] uppercase font-bold text-slate-300 block">Custo Adicional do Plano de Saúde</span>
           <p id="memBalancoSaude13" class="text-base font-black text-rose-400 mt-1">R$ 0,00</p>
           <span class="text-[10px] text-slate-400">13 mensalidades oficiais</span>
         </div>
@@ -1147,8 +1147,8 @@
                 <ul class="space-y-1.5 text-slate-700 pl-4 list-disc text-[11px] leading-relaxed">
                   <li><strong>Reajuste Salarial de 4,60%:</strong> 100% da reposição da inflação pelo INPC (4,00%) + Aumento Real de 0,60% incidindo sobre 13,33 folhas anuais (salário, 13º e férias).</li>
                   <li><strong>Reajuste nos Benefícios Sociais:</strong> Reposição integral do INPC (4,00%) + aumento real de 0,60% nos demais auxílios do acordo coletivo.</li>
-                  <li><strong>Teto Patronal CAIXA elevado para até 9%:</strong> O banco passa a poder arcar com até 9% da folha no plano (atualmente em vigor é 6,5%).</li>
-                  <li><strong>Déficit de 2026 Coberto pela CAIXA:</strong> A direção do banco assume o déficit financeiro do plano de saúde em 2026.</li>
+                  <li><strong>Teto Patronal elevado para até 9%:</strong> O banco passa a poder arcar com até 9% da folha no plano (atualmente em vigor é 6,5%).</li>
+                  <li><strong>Déficit de 2026 Coberto pelo Banco:</strong> A direção do banco assume o déficit financeiro do plano de saúde em 2026.</li>
                   <li><strong>Novos Parâmetros de Coparticipação:</strong> Teto anual proposto em R$ 4.700; pronto-socorro em R$ 120 por atendimento; telemedicina 100% gratuita.</li>
                 </ul>
 
@@ -1207,9 +1207,9 @@
                   <i class="fa-solid fa-route text-amber-600"></i> Cenários e Desdobramentos Possíveis:
                 </div>
                 <ul class="space-y-1.5 text-slate-700 pl-4 list-disc text-[11px] leading-relaxed">
-                  <li><strong>Nova Rodada de Negociação:</strong> A CAIXA e o comando sindical retornam à mesa para reformular a proposta com novos termos.</li>
+                  <li><strong>Nova Rodada de Negociação:</strong> A direção da empresa e o comando sindical retornam à mesa para reformular a proposta com novos termos.</li>
                   <li><strong>Mediação ou Dissídio Coletivo:</strong> O caso pode ser levado ao TST, que define os termos do acordo. O resultado é incerto e pode ou não incluir retroatividade.</li>
-                  <li><strong>Tabela do Saúde CAIXA:</strong> Permanece nas regras do ACT vigente até nova definição. O déficit financeiro de 2026 segue sem equacionamento definido.</li>
+                  <li><strong>Tabela do Plano de Saúde:</strong> Permanece nas regras do ACT vigente até nova definição. O déficit financeiro de 2026 segue sem equacionamento definido.</li>
                   <li><strong>Reajuste Salarial:</strong> Fica pendente de nova negociação, greve ou decisão judicial, sem prazo determinado.</li>
                 </ul>
               </div>
@@ -1230,14 +1230,14 @@
         <div class="mt-5 p-4 rounded-xl bg-blue-50/60 border border-blue-200 text-xs text-blue-950 flex items-start gap-3">
           <i class="fa-solid fa-compass text-blue-700 text-base mt-0.5 flex-shrink-0"></i>
           <div class="leading-relaxed">
-            <strong class="text-blue-950">Como Subsidiar sua Decisão:</strong> Observe o <strong>Saldo Anual Consolidado</strong> no seu Veredito. Para empregados sem dependentes ou com poucos dependentes diretos, o ganho salarial líquido gerado pelo reajuste supera com folga o reajuste do Saúde CAIXA, gerando saldo positivo real no bolso. Para empregados com dependentes de 21 a 24 anos (R$ 660 fora do teto) ou múltiplos dependentes, o novo plano consome parcela expressiva do reajuste salarial, exigindo ponderar se a elevação do teto patronal da CAIXA para 9% e a cobertura integral do déficit financeiro de 2026 compensam o aumento do desconto em folha.
+            <strong class="text-blue-950">Como Subsidiar sua Decisão:</strong> Observe o <strong>Saldo Anual Consolidado</strong> no seu Veredito. Para empregados sem dependentes ou com poucos dependentes diretos, o ganho salarial líquido gerado pelo reajuste supera com folga o reajuste do Plano de Saúde, gerando saldo positivo real no bolso. Para empregados com dependentes de 21 a 24 anos (R$ 660 fora do teto) ou múltiplos dependentes, o novo plano consome parcela expressiva do reajuste salarial, exigindo ponderar se a elevação do teto patronal do banco para 9% e a cobertura integral do déficit financeiro de 2026 compensam o aumento do desconto em folha.
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- Seção Parâmetros da Nova Proposta do Saúde CAIXA -->
+    <!-- Seção Parâmetros da Nova Proposta do Plano de Saúde -->
     <section>
       <div class="bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-sm">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -1245,7 +1245,7 @@
             <div class="inline-flex items-center gap-2 text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-1">
               <i class="fa-solid fa-hospital-user"></i> Parâmetros Oficiais da Nova Proposta
             </div>
-            <h3 class="text-lg md:text-xl font-extrabold text-slate-900">Regras e Valores Propostos para o Saúde CAIXA</h3>
+            <h3 class="text-lg md:text-xl font-extrabold text-slate-900">Regras e Valores Propostos para o Plano de Saúde</h3>
             <p class="text-slate-500 text-xs mt-1">Condições apresentadas na mesa de negociação coletiva (16/09/2026):</p>
           </div>
           <a href="https://caixanoticias.caixa.gov.br/Paginas/Not%C3%ADcias/2026/09-SETEMBRO/Saude-CAIXA-confira-os-avancos-da-nova-proposta.aspx" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 transition self-start md:self-auto flex items-center gap-1.5">
@@ -1307,7 +1307,7 @@
             <div class="w-8 h-8 mx-auto bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm mb-2">
               <i class="fa-solid fa-building-columns"></i>
             </div>
-            <span class="text-[10px] uppercase font-bold text-slate-400 block">Custeio CAIXA</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Custeio Patronal</span>
             <p class="text-sm font-black text-slate-800 mt-0.5">Até 9% da folha</p>
             <span class="inline-block text-[10px] font-semibold text-slate-600 bg-slate-200 px-1.5 py-0.2 rounded mt-1">
               Vigente é 6,5%
@@ -1332,7 +1332,7 @@
         <div class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-start gap-2.5">
           <i class="fa-solid fa-shield-halved text-slate-500 mt-0.5 text-base flex-shrink-0"></i>
           <div>
-            <strong>Adesão e Cancelamento (Regra CAIXA Mantida):</strong> A CAIXA confirmou no comunicado oficial que <em>permanece vedado o reingresso</em> ao Saúde CAIXA após eventual cancelamento. Qualquer decisão deve considerar que o desligamento do plano é definitivo.
+            <strong>Adesão e Cancelamento (Regra Mantida):</strong> Foi reiterado no comunicado oficial que <em>permanece vedado o reingresso</em> ao Plano de Saúde após eventual cancelamento. Qualquer decisão deve considerar que o desligamento do plano é definitivo.
           </div>
         </div>
       </div>
@@ -1347,10 +1347,10 @@
               <i class="fa-solid fa-scale-balanced"></i> Coerência & Transparência
             </div>
             <h3 class="text-lg md:text-xl font-extrabold text-slate-900">Fontes Consultadas & Bases Informativas</h3>
-            <p class="text-slate-500 text-xs mt-1">Os coeficientes e regras deste simulador foram auditados e cruzados entre os canais oficiais da CAIXA, das entidades sindicais e da legislação federal:</p>
+            <p class="text-slate-500 text-xs mt-1">Os coeficientes e regras deste simulador foram auditados e cruzados entre os canais da mesa de negociação, das entidades sindicais e da legislação federal:</p>
           </div>
           <span class="text-[11px] bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-lg self-start md:self-auto">
-            Mesa de Negociação CAIXA • Setembro/2026
+            Mesa de Negociação do ACT • Setembro/2026
           </span>
         </div>
 
@@ -1399,11 +1399,11 @@
                 <i class="fa-solid fa-users-rectangle text-blue-600"></i> FENAE & APCEFs
               </div>
               <p class="text-[11px] text-slate-600 mt-2 leading-relaxed">
-                Federação Nacional das Associações do Pessoal da CAIXA. Parâmetros de sustentabilidade do Saúde CAIXA, teto do banco em 9% e cobertura do déficit de 2026.
+                Federação Nacional das Associações do Pessoal da CAIXA. Parâmetros de sustentabilidade do Plano de Saúde, teto do banco em 9% e cobertura do déficit de 2026.
               </p>
             </div>
             <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
-              <span class="font-semibold text-slate-500">Associações CAIXA</span>
+              <span class="font-semibold text-slate-500">Entidades Associativas</span>
               <a href="https://fenae.org.br" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-600 hover:underline">fenae.org.br <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
             </div>
           </div>

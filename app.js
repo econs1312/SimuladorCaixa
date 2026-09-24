@@ -1,5 +1,5 @@
 // =============================================================================
-// Simulador de Salário Líquido CAIXA - Proposta 16/09/2026
+// Simulador de Salário Líquido - Proposta 16/09/2026
 // Engine de Cálculos Financeiros, Tributários e Previdenciários
 // =============================================================================
 
@@ -143,7 +143,7 @@ function recalcular() {
   const inssHoje = calcularInss(salarioBase);
   const funcefHoje = salarioBase * aliquotaFuncef;
 
-  // Saúde CAIXA Hoje: Titular 3,5% + R$ 480 por dependente direto (teto familiar de 7%)
+  // Plano de Saúde Hoje: Titular 3,5% + R$ 480 por dependente direto (teto familiar de 7%)
   const titularHoje = salarioBase * 0.035;
   const depDiretoHoje = depDiretos * 480;
   const custoBaseDiretosHoje = titularHoje + depDiretoHoje;
@@ -191,7 +191,7 @@ function recalcular() {
     // Abaixo do teto, com garantia de piso de R$ 50 por vida
     subtotalDiretosNovo = Math.max(custoBaseDiretosNovo, (1 + depDiretos) * 50);
   } else {
-    // TRAVA ESTRITA NO TETO DE 9,0% DA REMUNERAÇÃO BASE (ACT CAIXA 2026):
+    // TRAVA ESTRITA NO TETO DE 9,0% DA REMUNERAÇÃO BASE (ACT 2026):
     // Titular + dependentes diretos são rigidamente limitados ao teto de 9,0% da RB.
     // Conforme pactuado, dependentes excedentes NÃO geram acréscimo de R$ 50 além do teto.
     bateuTetoNovo = true;
@@ -223,7 +223,7 @@ function recalcular() {
   document.getElementById('cardLiqNovo').innerText = fmtMoeda(liquidoNovo);
   document.getElementById('cardDescontosNovoPct').innerText = `${((totalDescontosNovo / salarioNovo) * 100).toFixed(1)}% descontado em folha`;
 
-  // Impacto Anual do Saúde CAIXA (13 Mensalidades ao ano conforme regra oficial CAIXA)
+  // Impacto Anual do Plano de Saúde (13 Mensalidades ao ano conforme regra da proposta)
   const saudeAnualHoje = totalSaudeHoje * 13;
   const saudeAnualNovo = totalSaudeNovo * 13;
   const difSaudeAnual = saudeAnualNovo - saudeAnualHoje;
@@ -296,7 +296,7 @@ function recalcular() {
   }
   document.getElementById('tbFuncefPctInfo').innerText = funcefSubMsg;
 
-  // Saúde CAIXA Diretos (Titular + Dependentes Diretos)
+  // Plano de Saúde Diretos (Titular + Dependentes Diretos)
   const difDiretos = subtotalDiretosNovo - subtotalDiretosHoje;
   document.getElementById('tbSaudeDiretosHoje').innerText = fmtMoeda(subtotalDiretosHoje);
   document.getElementById('tbSaudeDiretosNovo').innerText = fmtMoeda(subtotalDiretosNovo);
@@ -398,7 +398,7 @@ function atualizarTermometroEResumo(saldoAnualTotal, ganhoSalarialLiqAnual, difS
       icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
     }
     if (desc) {
-      desc.innerText = "O ganho salarial líquido cobre todas as novas mensalidades do Saúde CAIXA e amplia sua renda anual.";
+      desc.innerText = "O ganho salarial líquido cobre todas as novas mensalidades do Plano de Saúde e amplia sua renda anual.";
     }
     if (barra) {
       barra.className = "h-full rounded-full transition-all duration-500 bg-emerald-500";
@@ -436,7 +436,7 @@ function atualizarTermometroEResumo(saldoAnualTotal, ganhoSalarialLiqAnual, difS
       icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
     }
     if (desc) {
-      desc.innerText = "O custo das novas mensalidades do Saúde CAIXA supera o reajuste salarial recebido ao longo do ano.";
+      desc.innerText = "O custo das novas mensalidades do Plano de Saúde supera o reajuste salarial recebido ao longo do ano.";
     }
     if (barra) {
       barra.className = "h-full rounded-full transition-all duration-500 bg-rose-500";
@@ -495,7 +495,7 @@ function atualizarTermometroEResumo(saldoAnualTotal, ganhoSalarialLiqAnual, difS
   const boxAprovarTab3 = document.getElementById('boxDecisaoAprovarTab3');
   if (boxAprovarTab3) {
     let txt = `• Salário bruto: ${fmtMoeda(salarioBase)} → <strong>${fmtMoeda(salarioNovo)}</strong><br>`;
-    txt += `• Saúde CAIXA mensal: ${fmtMoeda(totalSaudeHoje)} → <strong>${fmtMoeda(totalSaudeNovo)}</strong> (${(difSaudeMensal >= 0 ? '+' : '')}${fmtMoeda(difSaudeMensal)})<br>`;
+    txt += `• Plano de Saúde mensal: ${fmtMoeda(totalSaudeHoje)} → <strong>${fmtMoeda(totalSaudeNovo)}</strong> (${(difSaudeMensal >= 0 ? '+' : '')}${fmtMoeda(difSaudeMensal)})<br>`;
     txt += `• Líquido no bolso: ${fmtMoeda(liquidoHoje)} → <strong>${fmtMoeda(liquidoNovo)}</strong> (<span class="${difLiquido >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${(difLiquido >= 0 ? '+' : '')}${fmtMoeda(difLiquido)}/mês</span>)`;
     boxAprovarTab3.innerHTML = txt;
   }
@@ -503,7 +503,7 @@ function atualizarTermometroEResumo(saldoAnualTotal, ganhoSalarialLiqAnual, difS
   const boxRejeitarTab3 = document.getElementById('boxDecisaoRejeitarTab3');
   if (boxRejeitarTab3) {
     let txt = `• Salário bruto: <strong>${fmtMoeda(salarioBase)}</strong> (sem alteração)<br>`;
-    txt += `• Saúde CAIXA mensal: <strong>${fmtMoeda(totalSaudeHoje)}</strong> (tabela atual mantida)<br>`;
+    txt += `• Plano de Saúde mensal: <strong>${fmtMoeda(totalSaudeHoje)}</strong> (tabela atual mantida)<br>`;
     txt += `• Líquido no bolso: <strong>${fmtMoeda(liquidoHoje)}</strong> (sem alteração imediata)`;
     boxRejeitarTab3.innerHTML = txt;
   }
@@ -539,7 +539,7 @@ function aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxa
     title.innerText = `Saldo Positivo no Bolso: +${fmtMoeda(difLiquido)}/mês`;
     icon.className = "text-3xl text-emerald-600";
     icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-    desc.innerText = `O reajuste salarial (+${reajusteBrutoPp.toFixed(2)}%, composto por ${inpcPp.toFixed(2)}% de reposição da inflação e apenas ${taxaRealPp.toFixed(2)}% de aumento real) cobre o novo custeio do Saúde CAIXA (+${impactoPlanoPp.toFixed(2)} p.p.), garantindo um saldo líquido positivo de ${fmtMoeda(difLiquido)}/mês no seu contracheque.`;
+    desc.innerText = `O reajuste salarial (+${reajusteBrutoPp.toFixed(2)}%, composto por ${inpcPp.toFixed(2)}% de reposição da inflação e apenas ${taxaRealPp.toFixed(2)}% de aumento real) cobre o novo custeio do Plano de Saúde (+${impactoPlanoPp.toFixed(2)} p.p.), garantindo um saldo líquido positivo de ${fmtMoeda(difLiquido)}/mês no seu contracheque.`;
 
   } else if (difLiquido > 0) {
     const corrosaoInpcPp = Math.min(inpcPp, impactoPlanoPp - taxaRealPp);
@@ -552,7 +552,7 @@ function aplicarDiagnosticoEstrito(salarioBase, difLiquido, difPlano, inpc, taxa
     title.innerText = `Saldo Positivo Nominal: +${fmtMoeda(difLiquido)}/mês`;
     icon.className = "text-3xl text-amber-600";
     icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-    desc.innerText = `Embora seu contracheque receba ${fmtMoeda(difLiquido)} a mais por mês, o custo adicional do Saúde CAIXA (+${impactoPlanoPp.toFixed(2)} p.p.) consumiu integralmente os ${taxaRealPp.toFixed(2)}% de aumento real e confiscou ${corrosaoInpcPp.toFixed(2)} p.p. da reposição da inflação (${fmtMoeda(perdaInflacionariaMensal)}/mês que deveriam repor o poder de compra corroído pelo INPC).`;
+    desc.innerText = `Embora seu contracheque receba ${fmtMoeda(difLiquido)} a mais por mês, o custo adicional do Plano de Saúde (+${impactoPlanoPp.toFixed(2)} p.p.) consumiu integralmente os ${taxaRealPp.toFixed(2)}% de aumento real e confiscou ${corrosaoInpcPp.toFixed(2)} p.p. da reposição da inflação (${fmtMoeda(perdaInflacionariaMensal)}/mês que deveriam repor o poder de compra corroído pelo INPC).`;
 
   } else {
     const perdaLiquida = Math.abs(difLiquido);
@@ -580,7 +580,7 @@ function gerarTextoResumo() {
   const saldoAnual = document.getElementById('saldoAnualTotal') ? document.getElementById('saldoAnualTotal').innerText : '';
   const statusDecisao = document.getElementById('badgeTermometro') ? document.getElementById('badgeTermometro').innerText : '';
 
-  let msg = `📊 *Simulador CAIXA: Impacto no Bolso (Decisão do ACT)*\n` +
+  let msg = `📊 *Simulador de Salário Líquido: Impacto no Bolso (Decisão do ACT)*\n` +
             `• Salário Base: R$ ${sal}\n` +
             `• Contribuição FUNCEF: ${funcef}\n` +
             `• Salário Líquido Atual: ${liqH}\n` +
@@ -588,7 +588,7 @@ function gerarTextoResumo() {
             `• Variação Mensal em Folha: ${dif}/mês (${difPct})\n`;
 
   if (anualDif) {
-    msg += `• Variação Anual Saúde CAIXA (13x): ${anualDif}/ano\n`;
+    msg += `• Variação Anual Plano de Saúde (13x): ${anualDif}/ano\n`;
   }
   if (saldoAnual) {
     msg += `• *Saldo Consolidado no Ano (13,33 folhas líquidas - Saúde 13x):* ${saldoAnual}\n` +
@@ -617,7 +617,7 @@ function compartilharWhatsApp() {
 
   if (navigator.share) {
     navigator.share({
-      title: 'Simulador Salário Líquido CAIXA',
+      title: 'Simulador de Salário Líquido',
       text: textoCompleto,
       url: urlApp
     }).catch(() => {
@@ -813,7 +813,7 @@ function atualizarMemorialCalculo(dados) {
     setHtml('memFuncefStatus', `<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>100% da contribuição é dedutível na base de cálculo do IRRF (dentro do teto legal de 12%).</span>`);
   }
 
-  // 4. Saúde CAIXA (Auditoria Estrita da Trava de 9%)
+  // 4. Plano de Saúde (Auditoria Estrita da Trava de 9%)
   setTxt('memSaudeTitularSal', `${fmtMoeda(dados.salarioNovo)} × 3,7%`);
   setTxt('memSaudeTitularVal', fmtMoeda(dados.titularNovo));
   setTxt('memSaudeDepDiretoQtd', `${dados.depDiretos} vida(s) × R$ 560,00`);

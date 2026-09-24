@@ -1,6 +1,6 @@
-# Simulador de Salário Líquido - CAIXA
+# Simulador de Salário Líquido - ACT 2026
 
-Ferramenta interativa e independente para simulação e demonstração dos impactos financeiros da proposta apresentada na mesa de negociação da CAIXA (16/09/2026), abrangendo Remuneração, FUNCEF e novo custeio do Saúde CAIXA.
+Ferramenta interativa e independente para simulação e demonstração dos impactos financeiros da proposta apresentada na mesa de negociação coletiva (16/09/2026), abrangendo Remuneração, FUNCEF e novo custeio do Plano de Saúde.
 
 ---
 
@@ -17,7 +17,7 @@ Este projeto está hospedado e integrado à **[Vercel](https://vercel.com)**:
 
 - **Subsídio à Tomada de Decisão Coletiva:**
   - **Matriz Comparativa e Cenários:** Apresentação factual de ganhos, contrapartidas e desdobramentos possíveis com ou sem o novo ACT.
-  - **Balanço Anual Consolidado (12 Meses):** Equação completa somando a variação salarial líquida anual (12 salários + 13º salário + 1/3 constitucional de férias) confrontada com as 13 mensalidades oficiais do Saúde CAIXA.
+  - **Balanço Anual Consolidado (12 Meses):** Equação completa somando a variação salarial líquida anual (12 salários + 13º salário + 1/3 constitucional de férias) confrontada com as 13 mensalidades oficiais do Plano de Saúde.
   - **Termômetro da Decisão no Bolso:** Indicador visual inteligente (Saldo Positivo, Zona de Alerta/Empate, Saldo Negativo) demonstrando se a proposta gera ganho ou perda patrimonial no ano.
 - **Cálculo de Remuneração e Reajuste:**
   - Aplicação de INPC (4,00%) e Ganho Real (0,60%) sobre o Salário Base e Funções Gratificadas.
@@ -27,7 +27,7 @@ Este projeto está hospedado e integrado à **[Vercel](https://vercel.com)**:
   - **IRRF:** Tabela progressiva com dedução por dependentes e previdência, aplicando a opção mais vantajosa (Dedução Legal vs. Desconto Simplificado).
 - **FUNCEF Customizável:**
   - Ajuste dinâmico de alíquota contributiva (0% a 16%), com alerta de trava legal de 12% para dedução tributária.
-- **Saúde CAIXA (Novo Custeio):**
+- **Plano de Saúde (Novo Custeio):**
   - Mensalidade titular de 3,7%, dependentes diretos a R$ 560 com trava de 9% da remuneração e piso de R$ 50 para excedentes.
   - Dependentes indiretos 21-24 anos (R$ 660) e especiais (R$ 900) fora do teto familiar.
   - 13 mensalidades anuais (12 regulares + 13º salário).
